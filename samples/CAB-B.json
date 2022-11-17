@@ -1,0 +1,145 @@
+{
+    "width": 100.0,
+    "height": 42.25,
+    "depth": 26.0,
+    "finish": {
+        "color": "RED"
+    },
+    "frame": {
+        "width": 96.0,
+        "height": 40.0,
+        "depth": 26.0,
+        "bottomRail": false,
+        "gasketLoc": "laminate"
+    },
+    "shell": {
+        "backPanel": true,
+        "topPanel": false,
+        "bottomPanel": false,
+        "toekick": null
+    },
+    "radius": {
+        "left": true,
+        "right": true,
+        "top": false,
+        "bottom": false
+    },
+    "openings": [
+        {
+            "frame": {
+                "left": "end rail",
+                "right": "end rail",
+                "top": "gasketLoc",
+                "bottom": "none"
+            },
+            "width": 93.0,
+            "height": 38.0,
+            "depth": 26.0,
+            "openings": [
+                {
+                    "frame": {
+                        "left": "end rail",
+                        "right": "center rail",
+                        "top": "gasketLoc",
+                        "bottom": "none"
+                    },
+                    "width": 30.0,
+                    "height": 38.0,
+                    "depth": 26.0,
+                    "contents": {
+                        "type": "door",
+                        "data": {
+                            "width": 29.75,
+                            "height": 37.0,
+                            "handle": {
+                                "type": "MotionLatch",
+                                "swing": "left"
+                            }
+                        },
+                        "shelves": {
+                            "adjustable": 1
+                            }
+                    }
+                },
+                {
+                    "frame": {
+                        "left": "center rail",
+                        "right": "center rail",
+                        "top": "gasketLoc",
+                        "bottom": "none"
+                    },
+                    "width": 30.0,
+                    "height": 38.0,
+                    "depth": 26.0,
+                    "contents": {
+                        "type": "insert",
+                        "data": {
+                            "width": 30.0,
+                            "height": 37.077,
+                            "depth": 23.252,
+                            "insert": {
+                                "width": 30.0,
+                                "height": 36.875,
+                                "depth": 24.08
+                            },
+                            "drawers": [
+                                {
+                                    "height": 3
+                                },
+                                {
+                                    "height": 4
+                                },
+                                {
+                                    "height": 4
+                                },
+                                {
+                                    "height": 4
+                                },
+                                {
+                                    "height": 4
+                                },
+                                {
+                                    "height": 6
+                                },
+                                {
+                                    "height": 6
+                                },
+                                {
+                                    "height": 6
+                                }
+                            ]
+                        },
+                        "shelves": {
+                            "adjustable": 0
+                        }
+                    }
+                },
+                {
+                    "frame": {
+                        "left": "center rail",
+                        "right": "end rail",
+                        "top": "gasketLoc",
+                        "bottom": "none"
+                    },
+                    "width": 30.0,
+                    "height": 38.0,
+                    "depth": 26.0,
+                    "contents": {
+                        "type": "door",
+                        "data": {
+                            "width": 29.75,
+                            "height": 37.0,
+                            "handle": {
+                                "type": "MotionLatch",
+                                "swing": "right"
+                            }
+                        },
+                        "shelves": {
+                            "adjustable": 1
+                            }
+                    }
+                }
+            ]
+        }
+    ]
+}

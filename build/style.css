@@ -1,0 +1,216 @@
+hr.dashed {
+  border-top: 3px dashed #bbb;
+}
+.slidecontainer {
+  width: 100%;
+}
+/* Button */
+.button {
+  padding: 5px 15px;
+  margin: 2px;
+  font-size: 16px;
+  text-align: center;
+  cursor: pointer;
+  outline: none;
+  color: #fff;
+  background-color: #4caf50;
+  border: none;
+  border-radius: 5px;
+}
+.button:focus {
+  background-color: #1f4920;
+}
+.active,
+.button:hover {
+  background-color: #1f4920;
+}
+.button:active {
+  background-color: #1f4920;
+  box-shadow: 0 4px #dddddd;
+  transform: translateY(4px);
+}
+.button:disabled {
+  background-color: #d0d0d0;
+}
+.info {
+  background-color: #2196f3;
+} /* Blue */
+.info:hover {
+  background: #0b7dda;
+}
+
+/* The slider itself */
+.slider {
+  -webkit-appearance: none;
+  width: 86%;
+  height: 15px;
+  border-radius: 5px;
+  margin: 8px;
+  outline: none;
+  opacity: 0.7;
+  -webkit-transition: 0.2s;
+  transition: opacity 0.2s;
+}
+
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #48c1c5;
+  cursor: pointer;
+}
+
+.slider::-moz-range-thumb {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  background: #48c1c5;
+  cursor: pointer;
+}
+
+.numberinput {
+  width: 10%;
+}
+
+#xRange {
+  background: #eb5050;
+}
+#yRange {
+  background: #48c580;
+}
+#zRange {
+  background: #6055ff;
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 80px;
+  height: 24px;
+}
+
+.switch input {
+  display: none;
+}
+
+.doorslider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ca2222;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 34px;
+}
+
+.doorslider:before {
+  position: absolute;
+  content: '';
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+  border-radius: 50%;
+}
+
+input:checked + .doorslider {
+  background-color: #2ab934;
+}
+
+input:focus + .doorslider {
+  box-shadow: 0 0 1px #2196f3;
+}
+
+input:checked + .doorslider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(55px);
+}
+
+/*------ ADDED CSS ---------*/
+.doorslider:after {
+  content: 'CLOSE';
+  color: white;
+  display: block;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  font-size: 8px;
+  font-family: Verdana, sans-serif;
+}
+
+input:checked + .doorslider:after {
+  content: 'OPEN';
+}
+
+/* Common */
+.hide {
+  display: none;
+}
+div .block-card {
+  float: left;
+  display: block;
+  padding: 0.01em 16px;
+  background-color: lightskyblue;
+  border-radius: 16px;
+  text-align: center;
+  color: white;
+  margin: 1px;
+}
+a {
+  color: #0b7dda;
+}
+a:hover {
+  color: black;
+  cursor: pointer;
+}
+.card-option {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+.header {
+  padding: 8px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+}
+.navbar {
+  overflow: hidden;
+}
+.navbar button {
+  float: left;
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 14px 12px;
+  text-decoration: none;
+}
+.navbar button.right {
+  float: right;
+}
+.row:after {
+  content: '';
+  display: table;
+  clear: both;
+}
+.column {
+  float: left;
+}
+.column-10 {
+  width: 9%;
+}
+.column-25 {
+  width: 25%;
+}
+.column-90 {
+  width: 89%;
+}

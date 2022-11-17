@@ -1,0 +1,272 @@
+{
+  "width": 40.26,
+  "height": 16.59,
+  "depth": 39.73,
+  "finish": {
+    "color": "SV"
+  },
+
+  "top": {
+    "width": 40.26,
+    "depth": 30.26,
+
+    "type": "inverted",
+    "hingeSide": null,
+    "tray": null,
+
+    "finish": {
+      "color": "SV"
+    },
+    "options": {
+      "liner": true
+    }
+  },
+
+  "body": {
+    "width": 40,
+    "height": 16.5,
+    "depth": 30,
+
+    "front": {
+      "options": {},
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 26,
+          "height": 12.5,
+          "depth": 0,
+          "contents": {
+            "type": "filler",
+            "data": {
+              "width": 26,
+              "height": 12.5,
+              "finish": {
+                "color": "SV"
+              },
+              "type": "blank",
+              "snapIn": false,
+              "cutout": {
+                "width": 0,
+                "height": 0,
+                "shelf": false
+              },
+              "venting": {
+                "top": {
+                  "height": 0,
+                  "offset": 0
+                },
+                "bottom": {
+                  "height": 0,
+                  "offset": 0
+                }
+              }
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false,
+              "scales": 0
+            }
+          }
+        }
+      ]
+    },
+    "rear": {
+      "options": {},
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 26,
+          "height": 12.5,
+          "depth": 0,
+          "contents": {
+            "type": "filler",
+            "data": {
+              "width": 26,
+              "height": 12.5,
+              "finish": {
+                "color": "SV"
+              },
+              "type": "blank",
+              "snapIn": false,
+              "cutout": {
+                "width": 0,
+                "height": 0,
+                "shelf": false
+              },
+              "venting": {
+                "top": {
+                  "height": 0,
+                  "offset": 0
+                },
+                "bottom": {
+                  "height": 0,
+                  "offset": 0
+                }
+              }
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false,
+              "scales": 0
+            }
+          }
+        }
+      ]
+    },
+    "left": {
+      "options": {},
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 36,
+          "height": 12.5,
+          "depth": 0,
+          "contents": {
+            "type": "filler",
+            "data": {
+              "width": 36,
+              "height": 12.5,
+              "finish": {
+                "color": "SV"
+              },
+              "type": "blank",
+              "snapIn": false,
+              "cutout": {
+                "width": 0,
+                "height": 0,
+                "shelf": false
+              },
+              "venting": {
+                "top": {
+                  "height": 0,
+                  "offset": 0
+                },
+                "bottom": {
+                  "height": 0,
+                  "offset": 0
+                }
+              }
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false,
+              "scales": 0
+            }
+          }
+        }
+      ]
+    },
+    "right": {
+      "options": {},
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 36,
+          "height": 12.5,
+          "depth": 30,
+          "contents": {
+            "type": "insert",
+            "data": {
+              "width": 36,
+              "height": 11.577,
+              "depth": 27.252,
+              "duty": "standard",
+              "insert": {
+                "width": 36,
+                "height": 10.5,
+                "depth": 28.205
+              },
+              "finish": {
+                "color": null,
+                "customColor": null,
+                "blackAnodizedHandles": false,
+                "shelf": false,
+                "drawerFronts": true,
+                "insertSides": false,
+                "backPanel": false
+              },
+              "topSpace": 0,
+              "shelf": {
+                "type": "None",
+                "overrideSlotSpacing": false,
+                "customSlotSpacing": 0,
+                "frontOffset": 0,
+                "rearOffset": 0
+              },
+              "drawers": [
+                {
+                  "height": 11,
+                  "divisions": 3,
+                  "liner": true,
+                  "separators": 0,
+                  "partsTray": false,
+                  "whiteboard": false,
+                  "dividerType": "LeftToRight",
+                  "locking": null
+                }
+              ],
+              "riser": {
+                "height": 0,
+                "offset": 0
+              },
+              "bottomNotch": {
+                "height": 0,
+                "depth": 0
+              },
+              "locking": "none"
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false,
+              "scales": 0
+            }
+          }
+        }
+      ]
+    },
+    "options": {
+      "gearGuard": false,
+      "elecStorage": false
+    }
+  },
+
+  "mount": {
+    "make": "Chevy",
+    "model": "Tahoe",
+    "year": "2018",
+    "width": 47,
+    "height": 1.75,
+    "depth": 39.62,
+    "options": {
+      "tireAccess": false
+    }
+  }
+}

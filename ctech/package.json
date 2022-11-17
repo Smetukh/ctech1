@@ -1,0 +1,7 @@
+{
+    "name": "threekit-configurator",
+    "version": "#{VERSION}#",
+    "description": "Threekit Backed Product Configurator",
+    "files":["configurator.js", "configurator.js.map"]
+  }
+  

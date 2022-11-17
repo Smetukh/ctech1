@@ -1,0 +1,142 @@
+{
+    "width": 96.0,
+    "height": 26.0,
+    "depth": 18.0,
+    "finish": {
+        "color": "RED"
+    },
+    "frame": {
+        "width": 96.0,
+        "height": 24,
+        "depth": 18.0,
+        "bottomRail": true,
+        "gasketLoc": null
+    },
+    "shell": {
+        "backPanel": true,
+        "topPanel": true,
+        "bottomPanel": true,
+        "toekick": null
+    },
+    "radius": {
+        "left": false,
+        "right": false,
+        "top": false,
+        "bottom": true
+    },
+    "openings": [
+        {
+            "frame": {
+                "left": "end rail",
+                "right": "end rail",
+                "top": "top rail",
+                "bottom": "bottom rail"
+            },
+            "width": 93.0,
+            "height": 21.0,
+            "depth": 18.0,
+            "openings": [
+                {
+                    "frame": {
+                        "left": "end rail",
+                        "right": "center rail",
+                        "top": "top rail",
+                        "bottom": "bottom rail"
+                    },
+                    "width": 22.125,
+                    "height": 21.0,
+                    "depth": 18.0,
+                    "contents": {
+                        "type": "door",
+                        "data": {
+                            "width": 21.875,
+                            "height": 20.5,
+                            "handle": {
+                                "type": "MotionLatch",
+                                "swing": "left"
+                            }
+                        },
+                        "shelves": {
+                            "adjustable": 1
+                        }
+                    }
+                },
+                {
+                    "frame": {
+                        "left": "center rail",
+                        "right": "center rail",
+                        "top": "top rail",
+                        "bottom": "bottom rail"
+                    },
+                    "width": 22.125,
+                    "height": 21.0,
+                    "depth": 18.0,
+                    "contents": {
+                        "type": "door",
+                        "data": {
+                            "width": 21.875,
+                            "height": 20.5,
+                            "handle": {
+                                "type": "MotionLatch",
+                                "swing": "right"
+                            }
+                        },
+                        "shelves": {
+                            "adjustable": 1
+                        }
+                    }
+                },
+                {
+                    "frame": {
+                        "left": "center rail",
+                        "right": "center rail",
+                        "top": "top rail",
+                        "bottom": "bottom rail"
+                    },
+                    "width": 22.125,
+                    "height": 21.0,
+                    "depth": 18.0,
+                    "contents": {
+                        "type": "door",
+                        "data": {
+                            "width": 21.875,
+                            "height": 20.5,
+                            "handle": {
+                                "type": "MotionLatch",
+                                "swing": "left"
+                            }
+                        },
+                        "shelves": {
+                            "adjustable": 1
+                        }
+                    }
+                },
+                {
+                    "frame": {
+                        "left": "center rail",
+                        "right": "end rail",
+                        "top": "top rail",
+                        "bottom": "bottom rail"
+                    },
+                    "width": 22.125,
+                    "height": 21.0,
+                    "depth": 18.0,
+                    "contents": {
+                        "type": "door",
+                        "data": {
+                            "width": 21.875,
+                            "height": 20.5,
+                            "handle": {
+                                "type": "MotionLatch",
+                                "swing": "right"
+                            }
+                        },
+                        "shelves": {
+                            "adjustable": 1
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

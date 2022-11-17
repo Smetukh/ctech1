@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+    <title>title</title>
+  </head>
+  <body style="height: 100%">
+    <script src="demo.js"></script>
+    <script src="configurator.js"></script>
+    <div style="width: 100%; height: 100%">
+      <div id="dataSource" style="width: 39%; height: auto; top: 0; left: 0">
+        <div>
+          <div class="header">
+            <h1 id="header-message"></h1>
+          </div>
+          <div class="row">
+            <div id="wall-options-container"></div>
+            <div id="step1-containder">
+              <div id="block-options-container">
+                <div class="row">
+                  <div id="block-options"></div>
+                </div>
+              </div>
+            </div>
+            <hr class="dashed" />
+            <div id="blocks-container">
+              <div id="block-selector"></div>
+            </div>
+            <div id="cabinet-selector" class="hide">
+              <button class="button" id="btn-cabinets">Set Cabinets</button>
+              <button class="button" id="btn-cabinet-1">Cabinet 1</button>
+              <button class="button" id="btn-cabinet-2">Cabinet 2</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <hr class="dashed" />
+          <div style="display: flex">
+            <button class="button" id="go-back" style="width: 49%"><</button>
+            <button class="button" id="go-forward" style="width: 49%">></button>
+          </div>
+        </div>
+        <div id="input-area" class="row hide">
+          <hr class="dashed" />
+          <div style="margin: 5px">
+            <label for="productJSON">Select a product json: </label><br />
+            <input
+              accept=".json"
+              type="file"
+              id="productJSON"
+              name="productJSON"
+              disabled
+            />
+          </div>
+          <div style="margin: 5px">
+            <textarea
+              id="textInput"
+              name="textInput"
+              style="width: 100%; height: 600px"
+            ></textarea>
+            <br />
+            <input type="submit" id="render" value="render" disabled />
+            <label class="switch">
+              <input type="checkbox" id="doorswitch" />
+              <span class="doorslider round"></span>
+            </label>
+          </div>
+          <div
+            id="overlay"
+            style="
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              opacity: 0.6;
+              transition: 0.5 ease;
+              background-color: black;
+              display: none;
+            "
+          ></div>
+          <hr class="dashed" />
+          <div>
+            <div class="slidecontainer hide">
+              <div>
+                <br />
+                <input
+                  type="number"
+                  placeholder="Enter X"
+                  class="numberinput"
+                  id="xInput"
+                />
+                <input
+                  type="range"
+                  min="-250"
+                  max="250"
+                  value="0"
+                  class="slider"
+                  id="xRange"
+                />
+              </div>
+              <div>
+                <br />
+                <input
+                  type="number"
+                  placeholder="Enter Y"
+                  class="numberinput"
+                  id="yInput"
+                />
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value="0"
+                  class="slider"
+                  id="yRange"
+                />
+              </div>
+              <div>
+                <br />
+                <input
+                  type="number"
+                  placeholder="Enter Z"
+                  class="numberinput"
+                  id="zInput"
+                />
+                <input
+                  type="range"
+                  min="-50"
+                  max="50"
+                  value="0"
+                  class="slider"
+                  id="zRange"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        id="configurator"
+        style="width: 60%; height: 100%; position: fixed; top: 0; right: 0"
+      ></div>
+    </div>
+    <script>
+      const rootElement = document.getElementById("configurator");
+      const roomConfig = {
+        width: 250,
+        length: 250,
+        height: 100,
+      };
+      const onPlayerReady = () => {
+        window.initTestPage();
+      };
+
+      threekit.init(rootElement, roomConfig, onPlayerReady);
+    </script>
+  </body>
+</html>

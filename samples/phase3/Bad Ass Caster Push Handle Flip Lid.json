@@ -1,0 +1,546 @@
+{
+  "width": 51.565,
+  "height": 48.625,
+  "depth": 31.209,
+
+  "finish": {
+    "color": null,
+    "openingColor": "Clear Anodized"
+  },
+
+  "canopy": {},
+  "deck": {},
+
+  "options": {
+    "cover": false
+  },
+
+  "top": {
+    "width": 48.83,
+    "depth": 31.209,
+
+    "type": "hinged",
+    "hingeSide": "left",
+    "tray": "inverted",
+
+    "finish": {
+      "color": "RED"
+    },
+    "surface": "painted",
+    "options": {
+      "liner": false
+    }
+  },
+
+  "body": {
+    "width": 48,
+    "height": 37.125,
+    "depth": 30,
+
+    "front": {
+      "options": {
+        "tiedowns": "standard"
+      },
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 26,
+          "height": 33.125,
+          "depth": 0,
+          "contents": {
+            "type": "filler",
+            "data": {
+              "width": 26,
+              "height": 33.125,
+              "finish": {
+                "color": "RED"
+              },
+              "type": "blank",
+              "snapIn": false,
+              "cutout": {
+                "width": 0,
+                "height": 0,
+                "shelf": false
+              },
+              "venting": {
+                "top": {
+                  "height": 0,
+                  "offset": 0
+                },
+                "bottom": {
+                  "height": 0,
+                  "offset": 0
+                }
+              }
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false
+            }
+          }
+        }
+      ]
+    },
+    "rear": {
+      "options": {
+        "tiedowns": "standard"
+      },
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 26,
+          "height": 33.125,
+          "depth": 0,
+          "contents": {
+            "type": "filler",
+            "data": {
+              "width": 26,
+              "height": 33.125,
+              "finish": {
+                "color": "RED"
+              },
+              "type": "blank",
+              "snapIn": false,
+              "cutout": {
+                "width": 0,
+                "height": 0,
+                "shelf": false
+              },
+              "venting": {
+                "top": {
+                  "height": 0,
+                  "offset": 0
+                },
+                "bottom": {
+                  "height": 0,
+                  "offset": 0
+                }
+              }
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false
+            }
+          }
+        }
+      ]
+    },
+    "left": {
+      "options": {
+        "tiedowns": null
+      },
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 44,
+          "height": 33.125,
+          "depth": 0,
+          "openings": [
+            {
+              "frame": {
+                "left": "corner post",
+                "right": "center rail",
+                "top": "zee rail",
+                "bottom": "zee rail"
+              },
+              "width": 16.5,
+              "height": 33.125,
+              "depth": 0,
+              "contents": {
+                "type": "filler",
+                "data": {
+                  "width": 16.5,
+                  "height": 33.125,
+                  "finish": {
+                    "color": "RED"
+                  },
+                  "type": "blank",
+                  "snapIn": false,
+                  "cutout": {
+                    "width": 0,
+                    "height": 0,
+                    "shelf": false
+                  },
+                  "venting": {
+                    "top": {
+                      "height": 0,
+                      "offset": 0
+                    },
+                    "bottom": {
+                      "height": 0,
+                      "offset": 0
+                    }
+                  }
+                },
+                "shelves": {
+                  "adjustable": 0,
+                  "slideOut": 0,
+                  "hangerBar": 0,
+                  "liner": false
+                }
+              }
+            },
+            {
+              "frame": {
+                "left": "center rail",
+                "right": "corner post",
+                "top": "zee rail",
+                "bottom": "zee rail"
+              },
+              "width": 26,
+              "height": 33.125,
+              "depth": 0,
+              "contents": {
+                "type": "filler",
+                "data": {
+                  "width": 26,
+                  "height": 33.125,
+                  "finish": {
+                    "color": "RED"
+                  },
+                  "type": "blank",
+                  "snapIn": false,
+                  "cutout": {
+                    "width": 0,
+                    "height": 0,
+                    "shelf": false
+                  },
+                  "venting": {
+                    "top": {
+                      "height": 0,
+                      "offset": 0
+                    },
+                    "bottom": {
+                      "height": 0,
+                      "offset": 0
+                    }
+                  }
+                },
+                "shelves": {
+                  "adjustable": 0,
+                  "slideOut": 0,
+                  "hangerBar": 0,
+                  "liner": false
+                }
+              }
+            }
+          ]
+        }
+      ]
+    },
+    "right": {
+      "options": {
+        "tiedowns": null
+      },
+      "openings": [
+        {
+          "frame": {
+            "left": "corner post",
+            "right": "corner post",
+            "top": "zee rail",
+            "bottom": "zee rail"
+          },
+          "width": 44,
+          "height": 33.125,
+          "depth": 30,
+          "openings": [
+            {
+              "frame": {
+                "left": "corner post",
+                "right": "center rail",
+                "top": "zee rail",
+                "bottom": "zee rail"
+              },
+              "width": 26,
+              "height": 33.125,
+              "depth": 30,
+              "contents": {
+                "type": "insert",
+                "data": {
+                  "width": 26,
+                  "height": 32.202,
+                  "depth": 27.252,
+                  "duty": "standard",
+                  "insert": {
+                    "width": 26,
+                    "height": 31.125,
+                    "depth": 28.205
+                  },
+                  "finish": {
+                    "color": "RED",
+                    "customColor": null,
+                    "blackAnodizedHandles": false,
+                    "shelf": false,
+                    "drawerFronts": true,
+                    "insertSides": false,
+                    "backPanel": false
+                  },
+                  "topSpace": 0,
+                  "shelf": {
+                    "type": "None",
+                    "overrideSlotSpacing": false,
+                    "customSlotSpacing": 0,
+                    "frontOffset": 0,
+                    "rearOffset": 0
+                  },
+                  "drawers": [
+                    {
+                      "height": 3,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 4,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 5,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 6,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 6,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 8,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    }
+                  ],
+                  "riser": {
+                    "height": 0,
+                    "offset": 0
+                  },
+                  "bottomNotch": {
+                    "height": 0,
+                    "depth": 0
+                  },
+                  "locking": "none"
+                },
+                "shelves": {
+                  "adjustable": 0,
+                  "slideOut": 0,
+                  "hangerBar": 0,
+                  "liner": false
+                }
+              }
+            },
+            {
+              "frame": {
+                "left": "center rail",
+                "right": "corner post",
+                "top": "zee rail",
+                "bottom": "zee rail"
+              },
+              "width": 16.5,
+              "height": 33.125,
+              "depth": 30,
+              "contents": {
+                "type": "insert",
+                "data": {
+                  "width": 16.5,
+                  "height": 32.202,
+                  "depth": 27.252,
+                  "duty": "standard",
+                  "insert": {
+                    "width": 16.5,
+                    "height": 31.125,
+                    "depth": 28.205
+                  },
+                  "finish": {
+                    "color": "RED",
+                    "customColor": null,
+                    "blackAnodizedHandles": false,
+                    "shelf": false,
+                    "drawerFronts": true,
+                    "insertSides": false,
+                    "backPanel": false
+                  },
+                  "topSpace": 0,
+                  "shelf": {
+                    "type": "None",
+                    "overrideSlotSpacing": false,
+                    "customSlotSpacing": 0,
+                    "frontOffset": 0,
+                    "rearOffset": 0
+                  },
+                  "drawers": [
+                    {
+                      "height": 3,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 4,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 6,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 9,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    },
+                    {
+                      "height": 10,
+                      "divisions": 0,
+                      "liner": true,
+                      "separators": 0,
+                      "partsTray": false,
+                      "whiteboard": false,
+                      "dividerType": "LeftToRight",
+                      "locking": null
+                    }
+                  ],
+                  "riser": {
+                    "height": 0,
+                    "offset": 0
+                  },
+                  "bottomNotch": {
+                    "height": 0,
+                    "depth": 0
+                  },
+                  "locking": "none"
+                },
+                "shelves": {
+                  "adjustable": 0,
+                  "slideOut": 0,
+                  "hangerBar": 0,
+                  "liner": false
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  },
+
+  "chassis": {
+    "width": 47.82,
+    "height": 13.195,
+    "depth": 29.82,
+
+    "wheels": {
+      "size": 10,
+      "type": "bad ass",
+      "mount": "caster",
+      "brakes": {
+        "front": "caster",
+        "rear": null
+      },
+      "steering": {
+        "front": true,
+        "rear": false
+      }
+    },
+    "handle": {
+      "front": {
+        "type": "push-pull",
+        "detachable": false
+      },
+      "rear": {
+        "type": null,
+        "detachable": null
+      },
+      "right": {
+        "type": null,
+        "detachable": null
+      },
+      "left": {
+        "type": null,
+        "detachable": null
+      }
+    },
+    "front": {},
+    "rear": {},
+    "left": {},
+    "right": {},
+
+    "options": {
+      "fenders": false,
+      "nitrogenCradle": 0
+    }
+  }
+}

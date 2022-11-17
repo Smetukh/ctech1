@@ -1,0 +1,149 @@
+{
+    "width": 60,
+    "height": 24,
+    "depth": 16,
+    "finish": {
+        "color": "MB",
+        "customColor": null,
+        "shelves": false
+    },
+    "options": {
+        "shelfLiner": false
+    },
+    "frame": {
+        "width": 60,
+        "height": 24,
+        "depth": 16,
+        "finish": {
+            "color": "Clear Anodized",
+            "openingColor": "Clear Anodized"
+        },
+        "bottomRail": true,
+        "gasketLoc": null
+    },
+    "shell": {
+        "backPanel": false,
+        "topPanel": false,
+        "bottomPanel": true,
+        "toekick": null,
+        "internalBracing": {
+            "left": false,
+            "right": false
+        }
+    },
+    "extensions": {
+        "left": null,
+        "right": null
+    },
+    "soffit": {
+        "height": 0,
+        "left": false,
+        "right": false,
+        "front": false
+    },
+    "radius": {
+        "left": false,
+        "right": false,
+        "top": false,
+        "bottom": false,
+        "lighting": {
+            "switches": "none",
+            "wiring": "left",
+            "lights": 0,
+            "voltage": null,
+            "lightType": "none"
+        }
+    },
+    "openings": [
+        {
+            "frame": {
+                "left": "end rail",
+                "right": "end rail",
+                "top": "top rail",
+                "bottom": "bottom rail",
+                "finish": {
+                    "color": "Clear Anodized"
+                }
+            },
+            "width": 57,
+            "height": 21,
+            "depth": 16,
+            "openings": [
+                {
+                    "frame": {
+                        "left": "end rail",
+                        "right": "center rail",
+                        "top": "top rail",
+                        "bottom": "bottom rail",
+                        "finish": {
+                            "color": "Clear Anodized"
+                        }
+                    },
+                    "width": 27.75,
+                    "height": 21,
+                    "depth": 16,
+                    "contents": {
+                        "type": "door",
+                        "data": {
+                            "width": 27.25,
+                            "height": 20.75,
+                            "finish": {
+                                "color": "MB"
+                            },
+                            "handle": {
+                                "type": "MotionLatch",
+                                "swing": "top",
+                                "locking": false,
+                                "finish": {
+                                    "color": "Clear Anodized"
+                                }
+                            },
+                            "support": "gas",
+                            "steel": false,
+                            "venting": {
+                                "top": {
+                                    "height": 0,
+                                    "offset": 0
+                                },
+                                "bottom": {
+                                    "height": 0,
+                                    "offset": 0
+                                }
+                            }
+                        },
+                        "shelves": {
+                            "adjustable": 1,
+                            "slideOut": 0,
+                            "hangerBar": 0,
+                            "liner": false
+                        }
+                    }
+                },
+                {
+                    "frame": {
+                        "left": "center rail",
+                        "right": "end rail",
+                        "top": "top rail",
+                        "bottom": "bottom rail",
+                        "finish": {
+                            "color": "Clear Anodized"
+                        }
+                    },
+                    "width": 27.75,
+                    "height": 21,
+                    "depth": 16,
+                    "contents": {
+                        "type": "empty",
+                        "data": null,
+                        "shelves": {
+                            "adjustable": 1,
+                            "slideOut": 0,
+                            "hangerBar": 0,
+                            "liner": false
+                        }
+                    }
+                }
+            ]
+        }
+    ]
+}

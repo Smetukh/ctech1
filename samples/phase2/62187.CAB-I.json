@@ -1,0 +1,129 @@
+{
+  "width": 65.5,
+  "height": 29,
+  "depth": 14,
+  "finish": { "color": "RED", "customColor": null, "shelves": false },
+  "options": { "shelfLiner": false },
+  "frame": {
+    "width": 60,
+    "height": 24,
+    "depth": 14,
+    "finish": { "color": "Clear Anodized", "openingColor": "Clear Anodized" },
+    "bottomRail": true,
+    "gasketLoc": null
+  },
+  "shell": {
+    "backPanel": true,
+    "topPanel": true,
+    "bottomPanel": true,
+    "toekick": null,
+    "internalBracing": { "left": false, "right": false }
+  },
+  "extensions": { "left": { "type": "adjoined", "width": 14 }, "right": null },
+  "soffit": { "height": 3, "left": false, "right": true, "front": true },
+  "radius": {
+    "left": false,
+    "right": true,
+    "top": false,
+    "bottom": true,
+    "lighting": {
+      "switches": "none",
+      "wiring": "left",
+      "lights": 0,
+      "voltage": null,
+      "lightType": "none"
+    }
+  },
+  "openings": [
+    {
+      "frame": {
+        "left": "end rail",
+        "right": "end rail",
+        "top": "top rail",
+        "bottom": "bottom rail",
+        "finish": { "color": "Clear Anodized" }
+      },
+      "width": 57,
+      "height": 21,
+      "depth": 14,
+      "openings": [
+        {
+          "frame": {
+            "left": "end rail",
+            "right": "center rail",
+            "top": "top rail",
+            "bottom": "bottom rail",
+            "finish": { "color": "Clear Anodized" }
+          },
+          "width": 27.75,
+          "height": 21,
+          "depth": 14,
+          "contents": {
+            "type": "door",
+            "data": {
+              "width": 27.5,
+              "height": 20.5,
+              "finish": { "color": "RED" },
+              "handle": {
+                "type": "MotionLatch",
+                "swing": "left",
+                "locking": false,
+                "finish": { "color": "Clear Anodized" }
+              },
+              "support": "none",
+              "steel": false,
+              "venting": {
+                "top": { "height": 0, "offset": 0 },
+                "bottom": { "height": 0, "offset": 0 }
+              }
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false
+            }
+          }
+        },
+        {
+          "frame": {
+            "left": "center rail",
+            "right": "end rail",
+            "top": "top rail",
+            "bottom": "bottom rail",
+            "finish": { "color": "Clear Anodized" }
+          },
+          "width": 27.75,
+          "height": 21,
+          "depth": 14,
+          "contents": {
+            "type": "door",
+            "data": {
+              "width": 27.5,
+              "height": 20.5,
+              "finish": { "color": "RED" },
+              "handle": {
+                "type": "MotionLatch",
+                "swing": "right",
+                "locking": false,
+                "finish": { "color": "Clear Anodized" }
+              },
+              "support": "none",
+              "steel": false,
+              "venting": {
+                "top": { "height": 0, "offset": 0 },
+                "bottom": { "height": 0, "offset": 0 }
+              }
+            },
+            "shelves": {
+              "adjustable": 0,
+              "slideOut": 0,
+              "hangerBar": 0,
+              "liner": false
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

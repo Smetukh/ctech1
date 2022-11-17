@@ -1,0 +1,77 @@
+{
+  "width": 26,
+  "height": 96,
+  "depth": 24,
+  "finish": { "color": "RED", "customColor": null, "shelves": true },
+  "options": { "shelfLiner": false },
+  "frame": {
+    "width": 22,
+    "height": 92.5,
+    "depth": 24,
+    "finish": { "color": "Clear Anodized", "openingColor": "Clear Anodized" },
+    "bottomRail": false,
+    "gasketLoc": null
+  },
+  "shell": {
+    "backPanel": false,
+    "topPanel": true,
+    "bottomPanel": false,
+    "toekick": { "adjustableFeet": true, "venting": false },
+    "internalBracing": { "left": false, "right": false }
+  },
+  "extensions": { "left": null, "right": null },
+  "soffit": { "height": 0, "left": false, "right": false, "front": false },
+  "radius": {
+    "left": true,
+    "right": true,
+    "top": false,
+    "bottom": false,
+    "lighting": {
+      "switches": "none",
+      "wiring": "left",
+      "lights": 0,
+      "voltage": null,
+      "lightType": "none"
+    }
+  },
+  "openings": [
+    {
+      "frame": {
+        "left": "end rail",
+        "right": "end rail",
+        "top": "top rail",
+        "bottom": "toekick",
+        "finish": { "color": "Clear Anodized" }
+      },
+      "width": 19,
+      "height": 91,
+      "depth": 24,
+      "contents": {
+        "type": "door",
+        "data": {
+          "width": 18.75,
+          "height": 90.75,
+          "finish": { "color": "RED" },
+          "handle": {
+            "type": "MotionLatch",
+            "swing": "left",
+            "locking": false,
+            "finish": { "color": "Clear Anodized" }
+          },
+          "support": "none",
+          "steel": false,
+          "venting": {
+            "top": { "height": 0, "offset": 0 },
+            "bottom": { "height": 0, "offset": 0 }
+          }
+        },
+        "shelves": {
+          "adjustable": 4,
+          "slideOut": 0,
+          "hangerBar": 0,
+          "liner": false
+        }
+      }
+    }
+  ]
+}
