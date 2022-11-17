@@ -24,7 +24,7 @@ const rollbar = new Rollbar({
 
 // could use env var for these
 const threekitEnv = 'preview'; // 'admin-fts'; // process.env.THREEKIT_ENV;
-const authToken = 'a70c40d5-67ff-4321-ab0e-3bc20a9369d1'; // '5b501819-f5e5-486c-80ff-569340584267'; // process.env.THREEKIT_AUTH_TOKEN;
+const authToken = 'f33f2b85-1960-449e-aa3e-13155547483a'; // process.env.THREEKIT_AUTH_TOKEN;
 console.log(
   `Initializing ${threekitEnv} configurator with auth token`,
   authToken
