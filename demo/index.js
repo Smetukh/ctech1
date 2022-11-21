@@ -37,7 +37,7 @@ const initTestPage = () => {
 
   const goBackButton = document.getElementById('go-back');
   const goForwardButton = document.getElementById('go-forward');
-
+  const exportStepButton = document.getElementById('exportStep');
   // Input related
   const [cab1Btn, cab2Btn, cabsBtn] = [
     'btn-cabinet-1',
@@ -233,6 +233,24 @@ const initTestPage = () => {
       goForwardButton.setAttribute('disabled', true);
       cabsBtn.click();
     }
+  };
+
+  exportStepButton.onclick =  async () => {
+    // TODO: save constants to external file
+    const BEARER_TOKEN = 'f33f2b85-1960-449e-aa3e-13155547483a';
+    const ENV = 'preview';
+    const assetId = '2e3d3e2f-863e-4259-ac28-3696eb0647f0';
+    const EXPORT_ASSET_API = `https://${ENV}.threekit.com/api/asset-jobs/${assetId}/export/STP?bearer_token=${BEARER_TOKEN}`;
+
+    const rawExportResponse = await fetch(EXPORT_ASSET_API, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+    });
+    const exportContent = await rawExportResponse.json(); // TODO: handle export file
+    console.log(`exportContent = `, exportContent);
   };
 
   cabsBtn.onclick = async () => {
