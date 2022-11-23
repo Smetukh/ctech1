@@ -239,7 +239,7 @@ const initTestPage = () => {
     // TODO: save constants to external file
     const BEARER_TOKEN = 'f33f2b85-1960-449e-aa3e-13155547483a';
     const ENV = 'preview';
-    const assetId = '6e722940-ab95-4a95-ae9d-68c9026c2a57';
+    const assetId = '2e3d3e2f-863e-4259-ac28-3696eb0647f0';
     const EXPORT_ASSET_API = `https://${ENV}.threekit.com/api/asset-jobs/${assetId}/export/STP?bearer_token=${BEARER_TOKEN}`;
 
     const rawExportResponse = await fetch(EXPORT_ASSET_API, {
