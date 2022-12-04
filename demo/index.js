@@ -721,7 +721,7 @@ const initTestPage = () => {
               {
                 type: 'BoundingBox',
                 // targets: t,
-                ...rulerSettings,
+                // ...rulerSettings,
               },
             ],
             Properties: [
