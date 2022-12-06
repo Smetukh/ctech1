@@ -1,46 +1,8 @@
+import { MEASUREMENT_CONFIG, MEASUREMENT_NAME } from '../src/constants';
+import { getRootNode } from '../src/helper';
 import { BLOCKS, createSampleBlockBtns } from './blocks';
-const MEASUREMENT_NAME = 'Box Dimensions';
-const data = {
-  category: null,
-  isOpen: false,
-  showDimensions: false,
-}
-const rulerSettings = {
-  active: true,
-  color: {r: 0, g: 0, b: 0},
-  decimals: 0,
-  endEndcapShape: 3,
-  endcapRatio: 4,
-  fontCSSSpecifier: "Frutiger LT Std",
-  fontSize: 3,
-  fontType: 3,
-  includeChildren: true,
-  labelHorizontal: 1,
-  labelRotation: 0,
-  labelVertical: 0,
-  labelWorldRelative: false,
-  lineStyle: 0,
-  lineThickness: 0.17,
-  space: "local",
-  startEndcapShape: 3,
-  unit: "in",
-  xEnabled: true,
-  xLabel: "$L in",
-  xOffset: {x: 0, y: 0.1, z: 0.1},
-  xPositioning: "top",
-  yEnabled: true,
-  yLabel: "$L in",
-  yOffset: {x: 0.1, y: 0, z: 0.1},
-  yPositioning: "left",
-  zEnabled: true,
-  zLabel: "$L in",
-  zOffset: {x: 0.1, y: 0.1, z: 0},
-  zPositioning: "top",
-}
 
-
-
-
+let withDimensions = false
 const ADD_BLOCK_STAGE = 0;
 const SELECT_BLOCK_STAGE = 1;
 const SELECT_CABINET_STAGE = 2;
@@ -113,7 +75,6 @@ const initTestPage = () => {
 
   const textArea = document.getElementById('textInput');
   const textSubmit = document.getElementById('render');
-  
   const fileInputElem = document.getElementById('productJSON');
   const doorSwitch = document.getElementById('doorswitch');
   const dropbox = document.getElementById('dataSource');
@@ -209,10 +170,11 @@ const initTestPage = () => {
     const file = this.files[0];
     readFile(file);
   }
-  function handleSubmit() {
+  async function handleSubmit() {
     try {
       const obj = JSON.parse(textArea.value);
-      textInputHandler(obj);
+      await textInputHandler(obj);
+      getMeasurementNodes();
     } catch (error) {
       console.error(error);
     }
@@ -261,17 +223,18 @@ const initTestPage = () => {
             const type = block.type === 'Overhead' ? 'Wall' : block.type;
             obj = BLOCKS[`${layout}${type}`];
           }
-
           return block.setCabinets(obj);
         })
-      ).then(() => window.state.changeStage(2));
+      ).then(() => {
+        window.state.changeStage(2);
+        getMeasurementNodes();
+      })    
     } else if (stage === SELECT_CABINET_STAGE) {
       const block = window.threekit.getBlock(selectedBlock);
       headerMessage.innerHTML = `Blocks configurator - Edit cabinets of ${block.nodeId}`;
       inputAreaContainer.classList.remove('hide');
       blocksContainer.classList.add('hide');
       cabinetSelector.classList.remove('hide');
-
       goBackButton.removeAttribute('disabled');
       goForwardButton.setAttribute('disabled', true);
       cabsBtn.click();
@@ -403,11 +366,6 @@ const initTestPage = () => {
         },
         // data,
       });
-      console.log(`qqq blockObj [${block}] = `, blockObj);
-      console.log(`qqq blockSelector [${block}] = `, blockSelector);
-      
-      
-      
       createBlockInstanceCard(blockSelector, blockObj);
     };
   });
@@ -417,510 +375,66 @@ const initTestPage = () => {
     stageChangeHanlder(newStage);
   };
 
-  async function getRootId () {
-    const { api } = window.threekit;
-    let rootSceneId;
-  
-    const instanceNode = api.scene.get({ id: api.instanceId });
-  
-    if (instanceNode.type === 'Item') {
-      rootSceneId = await api.player.getAssetInstance({
-        id: api.instanceId,
-        plug: 'Proxy',
-        property: 'asset',
-      });
-    } else rootSceneId = api.instanceId; // it is a direct scene asset
-    return api.scene.findNode({ from: rootSceneId, type: 'Objects' });
-  };
-  function addBoxDimensions(targets, parentId) {
-    console.log(`qqq targets [addBoxDimensions] = `, targets);
-    console.log(`qqq parentId [addBoxDimensions] = `, parentId);
-    
-    
-    
-    const { scene } = window.threekit.api;
-  
-    const t = targets.map((id) => {
-      const child = window.threekit.api.scene.get({
-        from: id,
-        tags: ['Measurement'],
-        hierarchical: true,
-      });
-      if (child) {
-        return child.id;
-      }
-      return id;
-    });
-  
-    const id = scene.addNode(
-      {
-        type: 'Measurement',
-        name: MEASUREMENT_NAME,
-        plugs: {
-          Measurement: [
-            {
-              type: 'BoundingBox',
-              targets: t,
-              ...rulerSettings,
-            },
-          ],
-          Properties: [
-            {
-              type: 'Default',
-              visible: true, // data.showDimensions,
-            },
-          ],
-        },
-      },
-      parentId
-    );
-  
-    // scene.set({id, plug: 'Properties', property: 'visible'}, data.showDimensions);
-    return id;
-  }
-  async function addBoxDimensionsToRoot(targets) {
-    const parentId = await getRootId();
-    return addBoxDimensions(targets, parentId);
-  }
-  function traverseAttachedItems(itemId) {
-    const itemSet = new Set();
-    const traversalQueue = [itemId];
-    while (traversalQueue.length) {
-      const id = traversalQueue.shift();
-      if (!itemSet.has(id)) {
-        itemSet.add(id);
-        // const itemAttachments = getAttachmentsForItem(id).map((attachmentId) => {
-        //   const attachment = getAttachment(attachmentId);
-        //   if (attachment.itemA.itemId === id) {
-        //     return attachment.itemB.itemId;
-        //   }
-        //   return attachment.itemA.itemId;
-        // });
-        // traversalQueue.push(...itemAttachments);
-      }
-    }
-    return [...itemSet.values()];
-  }
-  function getAllItemGroups() {
-    const children = getMeasurableTargets();
-    console.log(`qqq children [getAllItemGroups] = `, children);
-    
-    
-    const set = new Set(children);
-    console.log(`qqq set [getAllItemGroups] = `, set);
-    
-    
-    const groups = [];
-    while (set.size > 0) {
-      const id = set.values().next().value;
-      set.delete(id);
-      const attachedItems = traverseAttachedItems(id);
-      groups.push(attachedItems);
-      attachedItems.forEach((attachedItemId) => set.delete(attachedItemId));
-    }
-    groups.sort((a, b) => b.length - a.length);
-    return groups;
-  }
-
-  function updateMainSet() {
-    const { scene } = window.threekit.api;
-    const dimensionIds = scene.filterNodes({ name: MEASUREMENT_NAME });
-    console.log(`qqq dimensionIds [updateMainSet] = `, dimensionIds);
-    
-    
-    dimensionIds.forEach((id) => {
-      scene.deleteNode(id);
-    });
-    const sortedGroups = getAllItemGroups();
-    console.log(`qqq sortedGroups [updateMainSet] = `, sortedGroups);
-    
-    
-    sortedGroups.map((group) => {
-      return addBoxDimensionsToRoot(group);
-    });
-    // if (data.category === 'Bed') {
-      // updateMeasureTargets();
-    // }
-  }
-
-
   goForwardButton.onclick = () => {
     const newStage = (stage + 1) % 3;
     stageChangeHanlder(newStage);
   };
 
-  
-
-  
-  function nodeIsChildOf(node, parentId) {
-    const { player } = window.threekit.api;
-  
-    if (!node || !node.parent) {
-      return false;
-    }
-  
-    if (node.parent === parentId) {
-      return true;
-    }
-  
-    return nodeIsChildOf(player.sceneGraph.nodes[node.parent], parentId);
-  }
-
-  function filterChilren(predicate, parent) {
-    console.log(`qqq parent [null] = `, parent);
-  
-    const { player } = window.threekit.api;
-    console.log(
-      `qqq player.sceneGraph.nodes [null] = `,
-      player.sceneGraph.nodes
-    );
-    return Object.values(player.sceneGraph.nodes)
-      .filter((node) => nodeIsChildOf(node, parent))
-      .filter(predicate)
-      .filter(node => node.name === 'EndPanel_inch_Top')
-      .map((node) => {
-        console.log(`qqq node [filterChilren] = `, node);
-        
-        
-        return node.id
-      });
-  }
-
-  function getMeasurableTargets() {
-    const { player } = window.threekit.api;
-    console.log(
-      `qqq player.sceneGraph.evaluatedNodes [null] = `,
-      player.sceneGraph.evaluatedNodes
-    );
-  
-    const models = Object.values(player.sceneGraph.evaluatedNodes)
-      .map((en) => en.node)
-      .filter((node) => node.type === 'Model' && node.name.includes('EndPanel 1'));
-    console.log(`qqq models [null] = `, models);
-  
-    const rawMeshes = models
-      .map((node) => {
-        console.log(`qqq node [meshes] = `, node);
-        
-        
-        return filterChilren((node) => node.type === 'PolyMesh', node.id)}) 
-    console.log(`qqq rawMeshes [null] = `, rawMeshes);
-    
-    
-    const meshes = rawMeshes.flat();
-    console.log(`qqq meshes [null] = `, meshes);
-  
-      return meshes;
-  
-  
-  }
-
-  async function updateMeasureTargets() {
+  async function getMeasurementNodes() {
     const { scene } = window.threekit.api;
-    // const meshes = getMeasurableTargets()
-    // console.log(`qqq meshes [updateMeasureTargets] = `, meshes);
-    // const meshes1 = [meshes[1]]
-    // console.log(`qqq  [null] = `, );
+    const rootNode = await getRootNode(window.api);
+    let adjacentBlocks = [];
+    const cabinetBlocks = window.state.getBlocks();
     
-    // const ids = window.threekit.api.selectionSet.ids
-    
-    // console.log(`qqq ids [null] = `, ids);
-    
-    
-
-    
-    //   scene.set(
-    //     { name: MEASUREMENT_NAME, plug: 'Measurement', property: 'targets' },
-    //     meshes
-    //     // [meshes[0]]
-    //     // meshes1
-    //   );
-
-    const parentId = await getRootId();
-    const id = scene.addNode(
-      {
-        type: 'Measurement',
-        name: MEASUREMENT_NAME,
-        plugs: {
-          Measurement: [
-            {
-              type: 'BoundingBox',
-              // targets: t,
-              // ...rulerSettings,
-            },
-          ],
-          Properties: [
-            {
-              type: 'Default',
-              visible: true, // data.showDimensions,
-            },
-          ],
-        },
-      },
-      parentId
-    );
-
-    const targets = scene.filterNodes({ type: 'PolyMesh'} );
-    console.log(`qqq targets [updateMeasureTargets] = `, targets);
-    
-    // scene.set({ id, plug: 'Measurement', property: 'targets' }, targets)
-
-    const blocks = window.state.getBlocks()
-
-    console.log(`qqq blocks [null] = `, blocks);
-
-    const blockNodeIds = blocks.map(i => i.nodeId);
-    console.log(`qqq blockNodeIds [null] = `, blockNodeIds);
-    
-    const adjacentBlocks = blocks.reduce((acc, item, i, arr) => {
-      const isAdjacent = item.adjacency.left.size > 0 || item.adjacency.right.size > 0
-
-      // if (isAdjacent) {
+    if (Array.isArray(cabinetBlocks) && cabinetBlocks.length) {
+      // [ROOM]: create arrays of separated (not adjacent) cabinet node ids
+      adjacentBlocks = cabinetBlocks.reduce((acc, item) => {
         const [leftAdjacentBlock] = item.adjacency.left;
         const [rightAdjacentBlock] = item.adjacency.right;
 
-        console.log(`qqq leftAdjacentBlock [null] = `, leftAdjacentBlock);
-        console.log(`qqq rightAdjacentBlock [null] = `, rightAdjacentBlock);
-        
-        
-        
+        // find index of adjacent cabinet
         const accIndex = acc.findIndex(adjacentBlock => {
-          return adjacentBlock.includes(leftAdjacentBlock) || adjacentBlock.includes(rightAdjacentBlock)
+          return Object.keys(adjacentBlock).includes(leftAdjacentBlock) || Object.keys(adjacentBlock).includes(rightAdjacentBlock)
         })
-        console.log(`qqq accIndex [null] = `, accIndex);
-        
-        
-        console.log(`qqq accIndex [null] = `, accIndex);
-        // const currentAccumulatorIndex = accIndex > -1 ? accIndex : acc.length;
+        // add to adjacent array
         if (accIndex > -1) {
-          acc[accIndex] = [...acc[accIndex], item.nodeId];
-        } else acc[acc.length] = [item.nodeId]
-        console.log(`qqq NEW acc [${i}] = `, acc);
-        
-        
-        
-      // }
-
-
-
-      return acc;
-    }, [])
-    console.log(`qqq adjacentBlocks [null] = `, adjacentBlocks);
+          acc[accIndex] = { ...acc[accIndex], [item.nodeId]: item.cabsId };
+          // or add new separate array
+        } else acc[acc.length] = { [item.nodeId]: item.cabsId }
+        return acc;
+      }, []);      
+    } else { // [BASE SCENE]: get cabinet node ids
+      const cabinets = window.state.getCabinets() ;
+      adjacentBlocks = Object.keys(cabinets).map(nodeId => ({ nodeId }))
+    }    
     
-    
-    // scene.set({ id, plug: 'Measurement', property: 'targets' }, blockNodeIds)
-
-    adjacentBlocks.forEach((adjacentArray, i) => {
-
-      scene.set({ id: scene.addNode(
+    // set measurements nodes on the cabinets. We set dimensions visible later on show dimension click 
+    adjacentBlocks.forEach((adjacentArray) => {
+      scene.set(
         {
-          type: 'Measurement',
-          name: MEASUREMENT_NAME,
-          plugs: {
-            Measurement: [
-              {
-                type: 'BoundingBox',
-                // targets: t,
-                // ...rulerSettings,
-              },
-            ],
-            Properties: [
-              {
-                type: 'Default',
-                visible: true, // data.showDimensions,
-              },
-            ],
-          },
-        },
-        parentId
-      ), plug: 'Measurement', property: `targets` }, adjacentArray)
+          id: scene.addNode(MEASUREMENT_CONFIG, rootNode),
+          plug: 'Measurement',
+          property: `targets`
+        }, Object.values(adjacentArray)
+      )
     })
-    
   }
 
   dimensionsButton.onclick = async () => {
     const { scene } = window.threekit.api;
-    console.log(`qqq dimensionsButton[null] = `);
-    // await updateMainSet();
-
-    await updateMeasureTargets();
+    withDimensions = !withDimensions;
     const measurementNodes = scene.filterNodes({ name: MEASUREMENT_NAME });
-  console.log(`qqq measurementNodes [null] = `, measurementNodes);
-    console.log(`qqq measurementNodes[0] [null] = `, measurementNodes[0]);
-    
-    
-  // measurementNodes.forEach((id, index) => {
-  //   scene.set(
-  //     {
-  //       id,
-  //       plug: 'Properties',
-  //       property: 'visible',
-  //     },
-  //     index === 1 // TODO: add toggle
-  //       ? false
-  //       : true
-  //   );
-  // });
 
-
-
-//   const { scene } = window.threekit.api;
-//   const parentId1 = await api.scene.findNode();
-//   console.log(`qqq parentId1 [null] = `, parentId1);
-  
-  
-//   const parentId = await getRootId();
-//   console.log(`qqq parentId [null] = `, parentId);
-  
-  
-//   const measureId = await scene.addNode({
-//       type: 'Measurement',
-//       name: 'Box Dimensions',
-//       plug: {
-//           Measurement: [{
-//               type: 'BoundingBox'
-//           }]
-//       }
-//   }, parentId);
-  
-// console.log(`qqq measureId [null] = `, measureId);
-
-// const allPolymesh = await api.scene.getAll({ type: "PolyMesh" });
-// console.log(`qqq allPolymesh [null] = `, allPolymesh);
-
-// const removedIds = Object.keys(allPolymesh).reduce((sum, item) => {
-//   return allPolymesh[item].name === 'FLOOR' || allPolymesh[item].name === 'ground world position ' ? [...sum, allPolymesh[item].id] : sum
-// }, [])
-// console.log(`qqq removedIds [null] = `, removedIds);
-
-
-// const targets = await api.scene.filterNodes({ type: "PolyMesh" }); // .filter(id=> !removedIds.includes(id))
-
-//     console.log(`qqq targets [null] = `, targets);
-    
-// await api.scene.set({name: MEASUREMENT_NAME, plug: 'Measurement', property: 'targets'}, targets);
-    
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // const blocks1 = window.threekit.getBlocks();
-    // console.log(`qqq blocks1 [null] = `, blocks1);
-    // const blockTargets = Object.keys(blocks1)
-    
-    // function addBoxDimensions(targets, parentId) {
-    //   const {scene} = window.threekit.api;
-    //   console.log(`qqq scene [addBoxDimensions] = `, scene);
-    //   console.log(`qqq targets [addBoxDimensions] = `, targets);
-      
-      
-    //   const t = targets.map((id) => {
-    //     const child = window.threekit.api.scene.get({
-    //       from: id,
-    //       tags: ['Measurement'],
-    //       hierarchical: true,
-    //     });
-    //     if (child) {
-    //       console.log(`qqq child [null] = `, child);
-          
-          
-    //       return child.id;
-    //     }
-    //     return id;
-    //   });
-    //   console.log(`qqq t [null] = `, t);
-      
-      
-    //   const id = scene.addNode({
-    //     type: 'Measurement',
-    //     name: MEASUREMENT_NAME,
-    //     plugs: {
-    //       Measurement: [{
-    //         type: 'BoundingBox',
-    //         targets: t,
-    //         ...rulerSettings,
-    //       }],
-    //       Properties: [{
-    //         type: 'Default',
-    //         visible: data.showDimensions,
-    //       }],
-    //     },
-    //   }, parentId);
-    //   // scene.set({id, plug: 'Properties', property: 'visible'}, data.showDimensions);
-    //   console.log(`qqq id [addBoxDimensions] = `, id);
-      
-      
-    //   return id;
-    // }
-    
-    // // async function addBoxDimensionsToRoot(targets) {
-    //   const parentId = await getRootId();
-    //   const dimensionsId = addBoxDimensions(blockTargets, parentId);
-    //   // return addBoxDimensions(targets, parentId);
-    // // }
-    // console.log(`qqq dimensionsId [null] = `, dimensionsId);
-    
-    
-    // console.log(`qqq parentId [null] = `, parentId);
-
-
-
-
-
-
-
-
-
-
-
-    // const resultPromise = await Promise.all(
-    //   [
-    //     ['Block', 'Null'],
-    //     ['Cabinets', 'Null'],
-    //     ['Straight', 'Block'],
-    //   ].map((args) => window.poolApi.getObject(...args))
-    // );
-    //   console.log(`qqq resultPromise [Promise] = `, resultPromise);
-      
-      
-    // console.log(`qqq thisblockId [null] = `, thisblockId);
-    // console.log(`qqq thiscabsId [null] = `, thiscabsId);
-    // console.log(`qqq thisnodeId [null] = `, thisnodeId);
-    
-    
-    
-    // [thisnodeId, thiscabsId, thisblockId]
-    // const instanceId = await getAssetInstanceId(window.api, thisblockId);
-    //   console.log(`qqq this.instanceId [init111] = `, instanceId);
-      
-    
-    
-    // export {
-    //   addBoxDimensionsToRoot,
-    //   addBoxDimensions,
-    // }
-    
+    // set dimensions visible: true/false
+    measurementNodes.forEach((id) => {
+      scene.set(
+        {
+          id,
+          plug: 'Properties',
+          property: 'visible',
+        }, withDimensions
+      );
+    });
   };
 
   fileInputElem.addEventListener('change', handleFile, false);

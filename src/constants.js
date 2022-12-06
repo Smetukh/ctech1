@@ -26,7 +26,8 @@ const assetIds = {
   Door: '4e5c56e9-b5ae-4639-a67e-66591cba9514',
   Shelf: '25c1ff2c-e9e1-47bf-aa97-a11fb419ab95',
   HangerBar: '982c4a3f-eb31-44eb-931c-5349876e2791',
-  FillerPanel: 'e0ff709c-3f80-4fd6-8988-c27652f9f2b0',
+  //FillerPanel: 'e0ff709c-3f80-4fd6-8988-c27652f9f2b0',
+  FillerPanel: 'b17e2eb4-e295-47e7-97d5-fd52b25bc8b4',
   GasSpringLeft: '25141766-ce1c-4877-9752-8222a1ad4979',
   GasSpringRight: '683cbbc4-2e45-419c-9b45-34376f4e0ec0',
   RadiusPanel: '424d7d69-443c-484b-8ec9-d211de3aff89',
@@ -66,6 +67,9 @@ const assetIds = {
   BadassCasterSwivel: 'f76ea7d3-986a-49d0-b1ad-e22f4b517173',
   BadassCasterRigid: 'fc289609-2b37-4485-8344-d8ba047cbd80',
   BadassCasterBrakes: '7dd8fc49-ddd2-4bf9-94e3-3261c70042a5',
+  HalfassCasterFixed: '36be99af-7ef2-4588-8358-05185b9eb737',
+  HalfassCasterSwivelBR: '4109a15f-1dab-4c8f-9991-d96ba703f148',
+  HalfassCasterSwivelBL: '0c133d2e-1d36-470a-9151-adc10d578114',
   HotRodMount: '6cbbbd56-49a6-42ab-82ba-4fa056227e9a',
   HotRodWheelsSwivel: 'd839a29c-e5a7-4494-a77a-68b19cac740e',
   HotRodWheelBrakes: '1dda8ca8-166a-41b3-977c-ac213322f29a',
@@ -80,8 +84,16 @@ const assetIds = {
   StandardWheelBrakes: '6872aaba-84ae-4fa8-a1d9-107cba82b9d9',
   StandardWheelsRigid: 'ee9bf0f8-5ca6-42ac-9931-a7795e7c8f56',
   PushPullHandle: '97c87dc9-304f-447c-ab60-43d5f2efbe95',
-  TeeHandle: 'd544556c-6f26-4a22-a5f9-ff85faf057ed',
+  TeeHandle: 'f2e869fc-72d1-4594-bd32-27bc76c87005',
+  StandardTeeHandle: 'ca9f4642-366b-4dc9-ae69-36260686d6e8',
   HeimJointTeeHandle: 'e36ac412-f6ce-4db9-883b-df4d745eab8f',
+  StandardHeimJointTeeHandle: '86845440-8e9f-4911-abad-65a82a29bd61',
+  SingleNitrogenCradle: '731de92f-38f2-44be-b377-30f8153ea824',
+  DualNitrogenCradle: '763e84ef-bcac-4e1d-a8d1-42281299c7bc',
+  MiniNitrogenCradle: 'bce4880f-3379-4c65-b8ac-2899175c164d',
+  StandardDRing: 'b2157baa-3627-4b02-a2f4-fb26f80d6da6',
+  BilletDRing: '48d835be-06ba-4d13-8226-0ff19beb6f2f',
+  MacsTieDown: '01f97f09-397e-4120-a28b-9ee7220aa399',
   ChassisTriggerLatchDoor: '70c5ba83-178d-4bde-8838-18d4b05fa53f',
   TriggerLatchDoor: '9860f28f-fe5a-4cd1-80f0-285ce98bb03e',
   FoldingHandle: '8badc9cc-881f-4ee7-9c90-cb4b6da1b9ed',
@@ -180,4 +192,58 @@ export {
   LAST_OPENING,
   MIDDLE_OPENING,
   SINGLE_OPENING,
+};
+
+export const MEASUREMENT_NAME = 'Box Dimensions';
+
+const RULER_SETTINGS = {
+  active: true,
+  color: {r: 0, g: 0, b: 0},
+  decimals: 0,
+  endEndcapShape: 3,
+  endcapRatio: 4,
+  fontCSSSpecifier: "Frutiger LT Std",
+  fontSize: 3,
+  fontType: 3,
+  includeChildren: true,
+  labelHorizontal: 1,
+  labelRotation: 0,
+  labelVertical: 0,
+  labelWorldRelative: false,
+  lineStyle: 0,
+  lineThickness: 0.17,
+  space: "local",
+  startEndcapShape: 3,
+  unit: "in",
+  xEnabled: true,
+  xLabel: "$L in",
+  xOffset: {x: 0, y: 0.1, z: 0.1},
+  xPositioning: "top",
+  yEnabled: true,
+  yLabel: "$L in",
+  yOffset: {x: 0.1, y: 0, z: 0.1},
+  yPositioning: "left",
+  zEnabled: true,
+  zLabel: "$L in",
+  zOffset: {x: 0.1, y: 0.1, z: 0},
+  zPositioning: "top",
+};
+
+export const MEASUREMENT_CONFIG = {
+  type: 'Measurement',
+  name: MEASUREMENT_NAME,
+  plugs: {
+    Measurement: [
+      {
+        type: 'BoundingBox',
+        ...RULER_SETTINGS,
+      },
+    ],
+    Properties: [
+      {
+        type: 'Default',
+        visible: false
+      },
+    ],
+  },
 };
