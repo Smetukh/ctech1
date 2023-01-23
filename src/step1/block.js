@@ -246,12 +246,14 @@ export default class Block {
         .slice(blockJS.length)
         .map((cabId) => window.state.removeCabinet(cabId));
     }
-    const items = await Promise.all(
-      blockJS.map(async (cabJSON, index) => {
-        const cabinet = await this.setCabinet(cabJSON, index);
-        return cabinet.build();
-      })
-    );
+    var items = [];
+    var blockIndex = 0;
+    for (var block of blockJS) {
+      const cabinet = await this.setCabinet(block, blockIndex);
+      const cabId = await cabinet.build();
+      items.push(cabId);
+      blockIndex++;
+    }
     reparent(window.api, this.cabsId, ...items);
     this.initialized = true;
     this.items = items;

@@ -123,7 +123,7 @@ export class Cart extends Component {
     });
 
     window.poolApi.createObjectsPool(this.id);
-    setItemFinish(this.id, this.finish);
+    await setItemFinish(this.id, this.finish);
 
     console.log('Cart: ', this.id, ' loaded');
 

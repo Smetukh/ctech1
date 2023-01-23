@@ -37,7 +37,7 @@ export class GearGuard extends Component {
                 z: -(depth/2) * INCH_TO_M,
             },
             rotation: { x: 0, y: 0, z: 0 },
-            //mat: surface === 'painted' ? finish && finish.color : traySurfaceMat,
+            // mat: surface === 'painted' ? finish && finish.color : traySurfaceMat,
         },
         build: getNodeForGearGuard,
     };
@@ -63,7 +63,7 @@ export class GearGuard extends Component {
 
 
 
-const getNodeForGearGuard = async (id, values) => {
+async function getNodeForGearGuard (id, values) {
   const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation } = values;

@@ -84,27 +84,28 @@ export class Top extends Component {
           rotation: { x: 0, y: 0, z: 0 },
           xStretch: ((width - FIXED_TOP_MESH_WIDTH) / 2) * INCH_TO_M,
           zStretch: ((depth - FIXED_TOP_MESH_DEPTH) / 2) * INCH_TO_M,
-          mat: surface === 'stainless' ? null : traySurfaceMat,
+          mat: traySurfaceMat,
         },
         build: getNodeForNonHingedTop,
       };
-      if (surface === 'stainless') {
-        assets.overlay = {
-          name: 'StainlessSteelOverlay',
-          data: {
-            translation: {
-              x: 0,
-              y: (height / 2 + MAT_THICKNESS_INCHES - 0.05) * INCH_TO_M,
-              z: 0,
-            },
-            rotation: { x: 0, y: 0, z: 0 },
-            xStretch: ((width - STAINLESS_OVERLAY_MESH_WIDTH) / 2) * INCH_TO_M,
-            zStretch: ((depth - STAINLESS_OVERLAY_MESH_DEPTH) / 2) * INCH_TO_M,
-            mat: traySurfaceMat,
-          },
-          build: getNodeForStainlessOverlay,
-        };
-      }
+      // Stainless Steel top is now one piece that is corner formed, no longer an overlay
+      // if (surface === 'stainless') {
+      //   assets.overlay = {
+      //     name: 'StainlessSteelOverlay',
+      //     data: {
+      //       translation: {
+      //         x: 0,
+      //         y: (height / 2 + MAT_THICKNESS_INCHES - 0.05) * INCH_TO_M,
+      //         z: 0,
+      //       },
+      //       rotation: { x: 0, y: 0, z: 0 },
+      //       xStretch: ((width - STAINLESS_OVERLAY_MESH_WIDTH) / 2) * INCH_TO_M,
+      //       zStretch: ((depth - STAINLESS_OVERLAY_MESH_DEPTH) / 2) * INCH_TO_M,
+      //       mat: traySurfaceMat,
+      //     },
+      //     build: getNodeForStainlessOverlay,
+      //   };
+      // }
     }
 
     if (tray) {
@@ -130,7 +131,7 @@ export class Top extends Component {
   }
 }
 
-const getNodeForNonHingedTop = async (id, values) => {
+async function getNodeForNonHingedTop(id, values) {
   const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation, xStretch, zStretch, mat } = values;
@@ -177,15 +178,15 @@ const getNodeForNonHingedTop = async (id, values) => {
     );
   });
 
-  applyMaterialToNode(topId, mat);
-  applyMaterialToNode(bottomId, mat);
+  await applyMaterialToNode(topId, mat);
+  await applyMaterialToNode(bottomId, mat);
 
   //* need to return id so after build mesh the
   //* caller can reparent this to caller's null
   return id;
 };
 
-const getNodeForStainlessOverlay = async (id, values) => {
+async function getNodeForStainlessOverlay(id, values) {
   const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation, xStretch, zStretch, mat } = values;
@@ -299,7 +300,7 @@ function generateTray(top, body) {
   return newTray;
 }
 
-const getNodeForTray = async (id, values) => {
+async function getNodeForTray(id, values) {
   const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation, xStretch, zStretch, mat } = values;
@@ -408,7 +409,7 @@ function generateFixedHinge(top, body) {
   return fixedHinge;
 }
 
-const getNodeForHinge = async (id, values) => {
+async function getNodeForHinge(id, values) {
   const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation, xStretch } = values;
@@ -501,7 +502,7 @@ function generateHydraulic(top, body, sideName) {
   return hydraulic;
 }
 
-const getNodeForHydraulic = async (id, values) => {
+async function getNodeForHydraulic(id, values) {
   const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation } = values;
@@ -609,8 +610,8 @@ function generateMount(top, body, sideName) {
   return mount;
 }
 
-const getNodeForMount = async (id, values) => {
-  const instanceId = await getAssetInstanceId(window.api, id);
+async function getNodeForMount(id, values) {
+  // const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation } = values;
 
@@ -682,7 +683,7 @@ function generateHingedTop(top, body) {
   return topAsset;
 }
 
-const getNodeForHingedTop = async (id, values) => {
+async function getNodeForHingedTop(id, values) {
   const instanceId = await getAssetInstanceId(window.api, id);
   const applyMaterialToNode = materialAssigner(id);
   const { translation, rotation, xStretch, zStretch, mat } = values;

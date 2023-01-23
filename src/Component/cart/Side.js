@@ -19,6 +19,7 @@ export class Side extends Component {
     const { openings } = side;
     const bodyWidth = body.width;
     const bodyDepth = body.depth;
+    const tiedowns = body.front.options ? body.front.options.tiedowns : null;
 
     if (sideName === 'left') {
       this.translation = { x: 0, y: 0, z: -(bodyDepth / 2) * INCH_TO_M };
@@ -35,45 +36,17 @@ export class Side extends Component {
       this.rotation = { x: 0, y: 90, z: 0 };
     }
 
-    /* var centerRailOffset = 0;
-    
-    // Add handling for multiple openings
-    if(openings.openings !== undefined){
-      openings.forEach((opening, idx) => {
-        // Build Center rails by measuring right side of each opening
-        if(opening.frame.right === "center rail"){
-            // Offset will measure from left of opening. The measurements start at 0 (flush with left end post), but will include 1/2 center rail width for all further adjustments
-            centerRailOffset = (centerRailOffset == 0 ? centerRailOffset + opening.width + RAIL_WIDTH/2 : centerRailOffset + opening.width + RAIL_WIDTH/2);
-            const centerRail = {
-                name: 'CartCenterRail',
-
-                data: {
-                    translation: {
-                    x: -((width/2) + centerRailOffset) * INCH_TO_M,
-                    y: 0,
-                    z: 0,
-                    },
-                    rotation: { x: 0, y: 0, z: 0 },
-                    stretch: height * INCH_TO_M,
-                },
-                build: getNodeForPart,
-            };
-            assets.push(centerRail);
-        }
-      });
-    } */
-
     assets.openings = this.assets.openings
       ? this.assets.openings.reset(
           openings,
-          body,
+          (sideName === 'front' || sideName === 'rear') ? tiedowns : null,
           chassis,
           side.openings ? side.openings[0].width : side.width,
           side.openings ? side.openings[0].depth : side.depth
         )
       : new SideOpenings(
           openings,
-          body,
+          (sideName === 'front' || sideName === 'rear') ? tiedowns : null,
           chassis,
           side.openings ? side.openings[0].width : side.width,
           side.openings ? side.openings[0].depth : side.depth
@@ -83,19 +56,6 @@ export class Side extends Component {
 
     return this;
   }
-
-  /* async build() {
-    await this.fetchObjects();
-    const partNodes = await Promise.all(
-      Object.values(this.assets)
-        .filter((asset) => asset.modified !== false || !this.initialized)
-        .map((asset) => asset.build(asset.id, asset.data))
-    );
-
-    reparent(window.api, this.id, ...partNodes);
-    this.initialized = true;
-    return this.id;
-  } */
 
   async build() {
     await this.fetchObjects();

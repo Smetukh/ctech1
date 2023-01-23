@@ -11,9 +11,9 @@ const setNodeHighlighting = async (
   highlightChildren = false
 ) => {
   const node = window.api.player.sceneGraph.nodes[nodeId];
-  const { type, children } = node;
+  const { type, children, name } = node;
   if (node) {
-    if (type === 'PolyMesh') {
+    if (type === 'PolyMesh' && (name.includes('Door') || name.includes('Drawer') || name.includes('Shelf'))) {
       if (highlight) window.api.selectionSet.add(nodeId);
       else window.api.selectionSet.remove(nodeId);
     } else if (type === 'Model') {

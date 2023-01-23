@@ -42,9 +42,18 @@ export default class State {
       if (block.items) {
         block.items.forEach((id) => setNodeHighlighting(id, false, true));
       }
+    } else if (this.selectedCabId) {
+      if (this.cart === undefined) {
+        const cab = this.cabinets[this.selectedCabId];
+        setNodeHighlighting(cab.id, false, true);
+      } else {
+        const cart = this.cart;
+        setNodeHighlighting(cart.id, false, true);
+      }
     }
     this.selection = '';
     this.selectedCabId = '';
+    this.selectedCartId = '';
     if (notifySelectionChanged) {
       this.notifySelectionChanged();
     }
@@ -58,23 +67,40 @@ export default class State {
   }
 
   selectItem(nodeId, cabId, openingPath) {
-    if (
-      this.selection === nodeId &&
-      this.selectedCabId === cabId &&
-      this.openingPath === openingPath
-    )
-      return;
+    if (nodeId !== null) {
+      if (
+        this.selection === nodeId &&
+        this.selectedCabId === cabId &&
+        this.openingPath === openingPath
+      )
+        return;
 
-    this.clearSelection();
+      this.clearSelection();
 
-    const block = this.blocks[nodeId];
-    this.selection = nodeId;
-    this.selectedCabId = cabId;
-    this.openingPath = openingPath;
-    setNodeHighlighting(block.meshId, true);
-    // if (cabId) setNodeHighlighting(cabId, true, true);
+      const block = this.blocks[nodeId];
+      this.selection = nodeId;
+      this.selectedCabId = cabId;
+      this.openingPath = openingPath;
+      setNodeHighlighting(block.meshId, true);
+      // if (cabId) setNodeHighlighting(cabId, true, true);
 
-    this.notifySelectionChanged();
+      this.notifySelectionChanged();
+    }
+    else {
+      if (this.selectedCabId === cabId && this.openingPath === openingPath) return;
+
+      this.clearSelection();
+      if (this.cart === undefined) {
+        const cab = this.cabinets[cabId];
+        this.selectedCabId = cab.id;
+      } else {
+        const cart = this.cart;
+        this.selectedCabId = cart.id;
+      }
+      this.openingPath = openingPath;
+
+      this.notifySelectionChanged();
+    }
   }
 
   getBlocks() {

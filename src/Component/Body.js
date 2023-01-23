@@ -245,6 +245,56 @@ export class Body extends Component {
       bottomRightRail,
       bottomRearRail,
     };
+    
+    if (body.front.options && body.rear.options && body.front.options.tiedowns !== 'none' && body.rear.options.tiedowns !== 'none') {
+      var side = 'left';
+      var location = 'Front';
+      var assetTranslation;
+      var assetRotation = { x: 0, y: 180, z: 0 };
+      var assetName;
+      switch (body.front.options.tiedowns) {
+        case 'macsTieDown':
+          assetName = 'MacsTieDown';
+          assetTranslation = { x: (width / 2) * INCH_TO_M, y: -((height / 2) - 1) * INCH_TO_M, z: ((depth / 2) - 4) * INCH_TO_M};
+          break;
+        case 'standard':
+          assetName = 'StandardDRing';
+          assetTranslation = { x: ((width / 2) - 0.08) * INCH_TO_M, y: -((height / 2) - 5.5) * INCH_TO_M, z: ((depth / 2) - 5.5) * INCH_TO_M};
+          break;
+        case 'billet':
+          assetName = 'BilletDRing';
+          assetTranslation = { x: ((width / 2) - 0.08) * INCH_TO_M, y: -((height / 2) - 5.5) * INCH_TO_M, z: ((depth / 2) - 5.5) * INCH_TO_M};
+          break;
+      }
+      for (var i = 0; i < 4; ++i) {
+        switch (i) {
+          case 1:
+            side = 'right';
+            location = 'Front';
+            break;
+          case 2:
+            side = 'left';
+            location = 'Rear';
+            break;
+          case 3:
+            side = 'right';
+            location = 'Rear';
+            break;
+        }
+        assets[side + location + 'Tiedown'] = {
+          name: assetName,
+          data: {
+            translation: {
+              x: assetTranslation.x * (location === 'Front' ? -1 : 1),
+              y: assetTranslation.y,
+              z: assetTranslation.z * (side === 'left' ? -1 : 1),
+            },
+            rotation: (location === 'Front' ? assetRotation : null),
+          },
+          build: getNodeForTieDown,
+        };
+      }
+    }
 
     // calculate stretch, transfrom
     this.assets = updateAssets(this.assets, assets);
@@ -264,4 +314,25 @@ export class Body extends Component {
     this.initialized = true;
     return this.id;
   }
+}
+
+
+async function getNodeForTieDown(id, values) {
+  const { translation, rotation } = values;
+
+  // Translate
+  window.api.scene.set(
+    { id, plug: 'Transform', property: 'translation' },
+    translation
+  );
+
+  // Rotate
+  if (rotation) {
+    window.api.scene.set(
+      { id, plug: 'Transform', property: 'rotation' },
+      rotation
+    );
+  }
+
+  return id;
 }

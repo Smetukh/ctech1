@@ -43,7 +43,7 @@ const parts = {};
 const materials = {};
 
 function materialAssigner(id) {
-  return (instanceId, name) => {
+  return async (instanceId, name) => {
     const isFinish = !name;
     // Finish color can be changed, keep track of instances
     // and assign later by setItemFinish()
@@ -59,20 +59,16 @@ function materialAssigner(id) {
     if (!MATERIAL_MAPPING[name]) {
       console.error('Invalid material name');
     } else {
-      findMaterial(name).then((matId) => {
-        const resp = window.api.scene.set(
-          { id: instanceId, plug: 'Material', property: 'reference' },
-          matId
-        )        
-        return resp
-      }
+      const matId = await findMaterial(name)
+      window.api.scene.set(
+        { id: instanceId, plug: 'Material', property: 'reference' },
+        matId
       );
-      // console.error('Material not initialized');
     }
   };
 }
 
-function setItemFinish(cabId, name) {
+async function setItemFinish(cabId, name) {
   const cabPool = window.poolApi.getObjectsPool(cabId);
   if (cabPool && MATERIAL_MAPPING[name]) {
     const instances = Object.values(cabPool).reduce((acc, value) => {
@@ -81,14 +77,13 @@ function setItemFinish(cabId, name) {
       });
       return acc;
     }, []);
-    findMaterial(name).then((matId) =>
-      instances.forEach((instanceId) => {
-        window.api.scene.set(
-          { id: instanceId, plug: 'Material', property: 'reference' },
-          matId
-        );
-      })
-    );
+    const matId = await findMaterial(name);
+    instances.forEach((instanceId) => {
+      window.api.scene.set(
+        { id: instanceId, plug: 'Material', property: 'reference' },
+        matId,
+      );
+    });
     // console.error('Material not initialized');
     FINISH[cabId] = name;
   }

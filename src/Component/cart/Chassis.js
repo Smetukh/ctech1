@@ -33,7 +33,7 @@ export class Chassis extends Component {
 
   reset(chassis, body) {
     const { width, depth, height } = body;
-    const { model, wheels, handle, front, rear, left, right } = chassis;
+    const { model, wheels, handle, front, rear, left, right, options } = chassis;
 
     const chassisType = getChassisType(chassis);
 
@@ -142,44 +142,44 @@ export class Chassis extends Component {
       }
       // Wheels
       assets.frontLeftWheel = {
-        name: frontSteering ? 'CasterSwivel' : 'CasterRigid',
+        name: wheels.size === 4 ? (frontSteering ? 'CasterSwivel' : 'CasterRigid') : (frontSteering ? 'HalfassCasterSwivelBR' : 'HalfAssCasterFixed'),
         data: {
           translation: {
             x: -translationX,
-            y: translationY,
+            y: translationY - (wheels.size === 6 ? 1.625 * INCH_TO_M : 0),
             z: translationZ,
           },
         },
         build: getNodeForCaster,
       };
       assets.frontRightWheel = {
-        name: frontSteering ? 'CasterSwivel' : 'CasterRigid',
+        name: wheels.size === 4 ? (frontSteering ? 'CasterSwivel' : 'CasterRigid') : (frontSteering ? 'HalfassCasterSwivelBL' : 'HalfassCasterFixed'),
         data: {
           translation: {
             x: -translationX,
-            y: translationY,
+            y: translationY - (wheels.size === 6 ? 1.625 * INCH_TO_M : 0),
             z: -translationZ,
           },
         },
         build: getNodeForCaster,
       };
       assets.rearLeftWheel = {
-        name: rearSteering ? 'CasterSwivel' : 'CasterRigid',
+        name: wheels.size === 4 ? (rearSteering ? 'CasterSwivel' : 'CasterRigid') : (rearSteering ? 'HalfassCasterSwivelBR' : 'HalfassCasterFixed'),
         data: {
           translation: {
             x: translationX,
-            y: translationY,
+            y: translationY - (wheels.size === 6 ? 1.625 * INCH_TO_M : 0),
             z: translationZ,
           },
         },
         build: getNodeForCaster,
       };
       assets.rearRightWheel = {
-        name: rearSteering ? 'CasterSwivel' : 'CasterRigid',
+        name: wheels.size === 4 ? (rearSteering ? 'CasterSwivel' : 'CasterRigid') : (rearSteering ? 'HalfassCasterSwivelBL' : 'HalfassCasterFixed'),
         data: {
           translation: {
             x: translationX,
-            y: translationY,
+            y: translationY - (wheels.size === 6 ? 1.625 * INCH_TO_M : 0),
             z: -translationZ,
           },
         },
@@ -456,6 +456,19 @@ export class Chassis extends Component {
             )
           : new ChassisOpening(rear.openings[0], opTranslation, opRotation);
       }
+      if (options.nitrogenCradle === 1) {
+        assets.nitrogenCradle = {
+          name: 'MiniNitrogenCradle',
+          data: {
+            translation: {
+              x: (1 * INCH_TO_M),
+              y: translationY - (9.75 * INCH_TO_M),
+              z: 0,
+            },
+          },
+          build: getNodeForNitrogenCradle,
+        };
+      }
     } else if (chassisType === 'standard') {
       // ** Models come from the sample whose dimension of body is
       // ** 60x23.125x36 (WxHxD)
@@ -486,7 +499,7 @@ export class Chassis extends Component {
         },
         build: getNodeForWheels,
       };
-      if (frontBrakes) {
+      if (frontBrakes === 'hydraulic') {
         assets.frontBrakes = {
           name: 'StandardWheelBrakes',
           data: {
@@ -575,6 +588,19 @@ export class Chassis extends Component {
             )
           : new ChassisOpening(rear.openings[0], opTranslation, opRotation);
       }
+      if (options.nitrogenCradle > 0) {
+        assets.nitrogenCradle = {
+          name: options.nitrogenCradle === 1 ? 'SingleNitrogenCradle' : 'DualNitrogenCradle',
+          data: {
+            translation: {
+              x: (2.5 * INCH_TO_M),
+              y: translationY - (13.266 * INCH_TO_M),
+              z: 0,
+            },
+          },
+          build: getNodeForNitrogenCradle,
+        };
+      }
     }
 
     Object.entries(handle).forEach(([position, data]) => {
@@ -655,9 +681,9 @@ export class Chassis extends Component {
           },
           build: getNodeForPushPullHandle,
         };
-      } else if (type === 'tee handle') {
+      } else if (type === 'tee') {
         assets[`${position}Handle`] = {
-          name: 'TeeHandle',
+          name: chassisType === 'mini' ? 'TeeHandle' : 'StandardTeeHandle',
           data: {
             target: assets[`${position}Wheels`],
             xOffset,
@@ -667,12 +693,13 @@ export class Chassis extends Component {
               y: rotationYAlpha,
               z: 0,
             },
+            brakes: chassisType === 'mini' ? null : frontBrakes,
           },
           build: getNodeForTeeHandle,
         };
       } else if (type === 'heimJointTee') {
         assets[`${position}Handle`] = {
-          name: 'HeimJointTeeHandle',
+          name: chassisType === 'mini' ? 'HeimJointTeeHandle' : 'StandardHeimJointTeeHandle',
           data: {
             target: assets[`${position}Wheels`],
             xOffset,
@@ -682,6 +709,7 @@ export class Chassis extends Component {
               y: rotationYAlpha,
               z: 0,
             },
+            brakes: chassisType === 'mini' ? null : frontBrakes,
           },
           build: getNodeForTeeHandle,
         };
@@ -1242,6 +1270,7 @@ async function getNodeForStandardMount(id, values) {
       },
       stretchX
     );
+    applyMaterialToNode(mountBarId, 'BlackSteel');
 
     // Opening
     const openingId = window.api.scene.findNode({
@@ -1317,6 +1346,7 @@ async function getNodeForStandardMount(id, values) {
     },
     stretchZ || 0
   );
+  applyMaterialToNode(rearMountBarId, 'BlackSteel');
 
   // Front Panel
   const frontPanelId = window.api.scene.findNode({
@@ -1473,15 +1503,10 @@ async function getNodeForFoldingHandle(id, values) {
 }
 
 async function getNodeForTeeHandle(id, values) {
-  const { target, xOffset, yOffset } = values;
-  const { translation, rotation } = target.data;
+  const { target, xOffset, yOffset, rotation } = values;
+  const { translation } = target.data;
   const { x, y, z } = translation;
-  // const instanceId = await getAssetInstanceId(window.api, id);
-  // const targetInstanceId = await getAssetInstanceId(window.api, target.id);
-  // const attachPointId = window.api.scene.findNode({
-  //   from: targetInstanceId,
-  //   name: 'HandleAttachPoint',
-  // });
+  const instanceId = await getAssetInstanceId(window.api, id);
 
   // Translate
   window.api.scene.set(
@@ -1489,11 +1514,35 @@ async function getNodeForTeeHandle(id, values) {
     { x: x + xOffset, y: y + yOffset, z }
   );
   //  Rotation
-  if (rotation)
+  if (rotation) {
     window.api.scene.set(
       { id, plug: 'Transform', property: 'rotation' },
       rotation
     );
+  }
+  // Turn on/off brake components
+  if (values.brakes) {
+    const brakesId = window.api.scene.findNode({
+      from: instanceId,
+      name: 'Brake_Assy'
+    });
+    window.api.scene.set(
+      {id: brakesId, plug: 'Properties', property: 'visible'},
+      values.brakes === 'hydraulic'
+    );
+  }
+
+  return id;
+}
+
+async function getNodeForNitrogenCradle(id, values) {
+  const { translation } = values;
+  
+  // Translate
+  window.api.scene.set(
+    { id, plug: 'Transform', property: 'translation' },
+    translation,
+  );
 
   return id;
 }

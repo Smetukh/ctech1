@@ -39,19 +39,19 @@ const BRACING_MESH_HEIGHT = 0.2826 * 12; // In Inches
 //const CART_PANEL_TOP_HOLE_TO_END_OF_MESH_HEIGHT = 0.125 * 12; // In Inches
 
 export class SideOpening extends Component {
-  constructor(opening, chassis, idx, nodeLevel, isEndUnit, translation) {
+  constructor(opening, chassis, tiedowns, idx, nodeLevel, isEndUnit, translation) {
     super(`opening${idx}`);
 
-    this.reset(opening, chassis, idx, nodeLevel, isEndUnit, translation);
+    this.reset(opening, chassis, tiedowns, idx, nodeLevel, isEndUnit, translation);
   }
 
-  reset(opening, chassis, idx, nodeLevel, isEndUnit, translation) {
+  reset(opening, chassis, tiedowns, idx, nodeLevel, isEndUnit, translation) {
     const assets = {};
     let chassisType;
     if(chassis){
       chassisType = getChassisType(chassis);
     }
-      
+
     this.nodeLevel = nodeLevel;
     this.translation = translation;
     //
@@ -62,10 +62,7 @@ export class SideOpening extends Component {
       width,
       height,
       depth,
-      leftExt,
-      rightExt,
     } = opening;
-
     let frameHeight = height;
     let shelfYOffset = 0.112 + 0.48;
     shelfYOffset -= 1.4;
@@ -123,13 +120,7 @@ export class SideOpening extends Component {
       assets.openings = this.assets.openings
         ? this.assets.openings.reset(
             openings,
-            {
-              width,
-              height,
-              depth,
-              leftExt,
-              rightExt,
-            },
+            tiedowns,
             chassis,
             0,
             0,
@@ -138,13 +129,7 @@ export class SideOpening extends Component {
           )
         : new SideOpenings(
             openings,
-            {
-              width,
-              height,
-              depth,
-              leftExt,
-              rightExt,
-            },
+            tiedowns,
             chassis,
             0,
             0,
@@ -155,7 +140,7 @@ export class SideOpening extends Component {
       
     if (contents) {
       contents.isCart = true;
-      contents.boundry = { width, height, depth, leftExt, rightExt };
+      contents.boundry = { width, height, depth };
       const { type, shelves } = contents;
 
       if (type === 'door') {
@@ -167,6 +152,7 @@ export class SideOpening extends Component {
           ? this.assets.insert.reset(contents, frame, false)
           : new Insert(contents, frame, false);
       } else if (type === 'filler') {
+        contents.tiedowns = tiedowns;
         assets.filler = this.assets.filler
           ? this.assets.filler.reset(contents)
           : new Filler(contents);

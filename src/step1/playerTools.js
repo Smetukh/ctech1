@@ -18,7 +18,167 @@ const getAction = (
   };
 };
 
-const selectionTool = {
+const baseSelectionTool = {
+  key: 'ctech',
+  label: 'Select1',
+  active: true,
+  enabled: true,
+  handlers: {
+    click: (ev) => {
+      if (ev.hitNodes && ev.hitNodes.length === 0) {
+        window.state.clearSelection(true);
+        return;
+      }
+
+      if (!ev.hitNodes || !ev.hitNodes.length === 0) return;
+
+      const hit = ev.hitNodes[0];
+
+      let hitCab;
+      let opening;
+      let side;
+      var isCart = window.state.cart !== undefined;
+      const openingPath = hit.hierarchy.reduce((acc, { nodeId, name }) => {
+        if (!isCart && window.state.cabinets[nodeId]) {
+          hitCab = nodeId;
+        } else if (/openings/.test(name)) {
+          if (acc) acc = acc.concat('.');
+          acc = acc.concat('openings');
+        } else if (/opening\d+/.test(name)) {
+          const number = Number.parseInt(
+            name.split(' ')[0].replace('opening', '')
+          );
+          acc = acc.concat(`[${number}]`);
+          opening = nodeId;
+        } else if (isCart && window.state.cart.id === nodeId) {
+          hitCab = nodeId;
+        } else if (isCart && state.cart.assets.right.id === nodeId) {
+          side = 'right';
+        } else if (isCart && state.cart.assets.chassis !== undefined && state.cart.assets.chassis.assets.rightOpening !== undefined && state.cart.assets.chassis.assets.rightOpening.id === nodeId) {
+          side = 'rightChassis';
+          opening = nodeId;
+          return 'chassis.right.openings[0]';
+        } else if (isCart && state.cart.assets.chassis !== undefined && state.cart.assets.chassis.assets.leftOpening !== undefined && state.cart.assets.chassis.assets.leftOpening.id === nodeId) {
+          side = 'leftChassis';
+          opening = nodeId;
+          return 'chassis.left.openings[0]';
+        } else if (isCart && state.cart.assets.chassis !== undefined && state.cart.assets.chassis.assets.rearOpening !== undefined && state.cart.assets.chassis.assets.rearOpening.id === nodeId) {
+          side = 'rearChassis';
+          opening = nodeId;
+          return 'chassis.rear.openings[0]';
+        }
+        return acc;
+      }, '');
+      const { THREE } = window.api;
+      
+      if (!hitCab) {
+        window.state.clearSelection(true);
+        if (window.state.camera && window.state.camera.id === api.player.cameraController.activeCamera) {
+          api.scene.set(
+            {
+              id: api.player.cameraController.activeCamera,
+              plug: 'Camera',
+              property: 'targetNode',
+            },
+            window.state.camera.targetNode
+          );
+
+          const player = new Player('camera', 'default', 500);
+          player.addAction(
+            getAction(
+              api.camera.getPosition(),
+              api.camera.getQuaternion(),
+              window.state.camera.position.clone(),
+              window.state.camera.quaternion.clone()
+            )
+          );
+          player.setStepper('move', (p) => ++p);
+          animation.linkPlayer('camera', player);
+          animation.playAnimation('move', ['camera'], () =>
+            animation.removePlayer('camera')
+          );
+
+          delete window.state.camera;
+        }
+        return;
+      }
+      if (hitCab) {
+        const currentPosition = api.camera.getPosition();
+        const currentQuaternion = api.camera.getQuaternion();
+        if (!window.state.camera) {
+          window.state.camera = {
+            id: api.player.cameraController.activeCamera,
+            position: currentPosition.clone(),
+            quaternion: currentQuaternion.clone(),
+            targetNode: api.scene.get({
+              id: api.player.cameraController.activeCamera,
+              plug: 'Camera',
+              property: 'targetNode',
+            }),
+          };
+        }
+        
+        const R90 = Math.PI / 2;
+        if (isCart && side !== undefined) {
+          const rotationY = (side === 'leftChassis' ? 2 : side === 'rearChassis' ? 1 : 0) * R90;
+          api.camera.setQuaternion(
+            currentQuaternion
+              .clone()
+              .setFromEuler(new THREE.Euler(0, rotationY, 0, 'XYZ'))
+          );
+        } else if (!isCart) {
+          api.camera.setQuaternion(
+            currentQuaternion
+              .clone()
+              .setFromEuler(new THREE.Euler(0, 0, 0, 'XYZ'))
+          );
+        }
+
+
+        api.camera.frameBoundingSphere(hitCab);
+        const targetPosition = api.camera.getPosition();
+        const targetQuaternion = api.camera.getQuaternion();
+        api.camera.setPosition(currentPosition);
+        api.camera.setQuaternion(currentQuaternion);
+
+        const player = new Player('camera', 'default', 500);
+        player.addAction(
+          getAction(
+            currentPosition,
+            currentQuaternion,
+            targetPosition,
+            targetQuaternion
+          )
+        );
+        player.setStepper('move', (p) => ++p);
+        animation.linkPlayer('camera', player);
+        animation.playAnimation('move', ['camera'], () =>
+          animation.removePlayer('camera')
+        );
+
+        api.scene.set(
+          {
+            id: api.player.cameraController.activeCamera,
+            plug: 'Camera',
+            property: 'targetNode',
+          },
+          hitCab
+        );
+      }
+      
+      window.state.selectItem(null, hitCab, openingPath);
+      if (!isCart) {
+        if (opening) setNodeHighlighting(opening, true, true);
+        else if (hitCab) setNodeHighlighting(hitCab, true, true);
+      } else {
+        if (opening && side) setNodeHighlighting(opening, true, true);
+        else if (hitCab && side) setNodeHighlighting(hitCab, true, true);
+      }
+    },
+  },
+};
+
+const layoutSelectionTool = {
   key: 'ctech',
   label: 'Select',
   active: true,
@@ -272,4 +432,4 @@ const cameraTool = {
   },
 };
 
-export { moveTool, selectionTool, cameraTool };
+export { moveTool, baseSelectionTool, layoutSelectionTool, cameraTool, getAction };

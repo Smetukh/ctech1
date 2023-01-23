@@ -106,7 +106,7 @@ export class Cabinet extends Component {
     ]);
 
     window.poolApi.createObjectsPool(this.id);
-    setItemFinish(this.id, this.finish);
+    await setItemFinish(this.id, this.finish);
 
     console.log('Cabnet: ', this.id, ' loaded');
 

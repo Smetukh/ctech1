@@ -1,8 +1,6 @@
-import { MEASUREMENT_CONFIG, MEASUREMENT_NAME } from '../src/constants';
-import { getRootNode } from '../src/helper';
 import { BLOCKS, createSampleBlockBtns } from './blocks';
 
-let withDimensions = false
+let withDimensions = false;
 const ADD_BLOCK_STAGE = 0;
 const SELECT_BLOCK_STAGE = 1;
 const SELECT_CABINET_STAGE = 2;
@@ -41,6 +39,7 @@ const initTestPage = () => {
   const goBackButton = document.getElementById('go-back');
   const goForwardButton = document.getElementById('go-forward');
   const dimensionsButton = document.getElementById('dimensions');
+  const pdfButton = document.getElementById('get-pdf');
 
   // Input related
   const [cab1Btn, cab2Btn, cabsBtn] = [
@@ -174,7 +173,7 @@ const initTestPage = () => {
     try {
       const obj = JSON.parse(textArea.value);
       await textInputHandler(obj);
-      getMeasurementNodes();
+      window.threekit.setDimensionNodes();
     } catch (error) {
       console.error(error);
     }
@@ -227,7 +226,7 @@ const initTestPage = () => {
         })
       ).then(() => {
         window.state.changeStage(2);
-        getMeasurementNodes();
+        window.threekit.setDimensionNodes();
       })    
     } else if (stage === SELECT_CABINET_STAGE) {
       const block = window.threekit.getBlock(selectedBlock);
@@ -380,62 +379,25 @@ const initTestPage = () => {
     stageChangeHanlder(newStage);
   };
 
-  async function getMeasurementNodes() {
-    const { scene } = window.threekit.api;
-    const rootNode = await getRootNode(window.api);
-    let adjacentBlocks = [];
-    const cabinetBlocks = window.state.getBlocks();
-    
-    if (Array.isArray(cabinetBlocks) && cabinetBlocks.length) {
-      // [ROOM]: create arrays of separated (not adjacent) cabinet node ids
-      adjacentBlocks = cabinetBlocks.reduce((acc, item) => {
-        const [leftAdjacentBlock] = item.adjacency.left;
-        const [rightAdjacentBlock] = item.adjacency.right;
-
-        // find index of adjacent cabinet
-        const accIndex = acc.findIndex(adjacentBlock => {
-          return Object.keys(adjacentBlock).includes(leftAdjacentBlock) || Object.keys(adjacentBlock).includes(rightAdjacentBlock)
-        })
-        // add to adjacent array
-        if (accIndex > -1) {
-          acc[accIndex] = { ...acc[accIndex], [item.nodeId]: item.cabsId };
-          // or add new separate array
-        } else acc[acc.length] = { [item.nodeId]: item.cabsId }
-        return acc;
-      }, []);      
-    } else { // [BASE SCENE]: get cabinet node ids
-      const cabinets = window.state.getCabinets() ;
-      adjacentBlocks = Object.keys(cabinets).map(nodeId => ({ nodeId }))
-    }    
-    
-    // set measurements nodes on the cabinets. We set dimensions visible later on show dimension click 
-    adjacentBlocks.forEach((adjacentArray) => {
-      scene.set(
-        {
-          id: scene.addNode(MEASUREMENT_CONFIG, rootNode),
-          plug: 'Measurement',
-          property: `targets`
-        }, Object.values(adjacentArray)
-      )
-    })
-  }
-
-  dimensionsButton.onclick = async () => {
-    const { scene } = window.threekit.api;
+  dimensionsButton.onclick = () => {
     withDimensions = !withDimensions;
-    const measurementNodes = scene.filterNodes({ name: MEASUREMENT_NAME });
-
     // set dimensions visible: true/false
-    measurementNodes.forEach((id) => {
-      scene.set(
-        {
-          id,
-          plug: 'Properties',
-          property: 'visible',
-        }, withDimensions
-      );
-    });
+    window.threekit.showDimensions(withDimensions);
   };
+
+  pdfButton.onclick = async () => {
+    const { showDimensions, buildPdf } = window.threekit;
+    if (!withDimensions) showDimensions(true);
+    console.log(`qqq textArea.value [null] = `, textArea.value);
+    
+    const productJson = textArea.value ? JSON.parse(textArea.value) : {}
+    console.log(`qqq productJson [null] = `, productJson);
+    
+    
+    
+    await buildPdf(productJson); // pass cabinet json data
+    if (!withDimensions) showDimensions(false);
+};
 
   fileInputElem.addEventListener('change', handleFile, false);
   fileInputElem.removeAttribute('disabled');
