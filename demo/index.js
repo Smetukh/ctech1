@@ -39,6 +39,7 @@ const initTestPage = () => {
   const goBackButton = document.getElementById('go-back');
   const goForwardButton = document.getElementById('go-forward');
   const dimensionsButton = document.getElementById('dimensions');
+  const exportStepButton = document.getElementById('exportStep');
   const pdfButton = document.getElementById('get-pdf');
 
   // Input related
@@ -384,6 +385,37 @@ const initTestPage = () => {
     // set dimensions visible: true/false
     window.threekit.showDimensions(withDimensions);
   };
+
+  exportStepButton.onclick = () => {
+    // saveConfiguration() causes sceneGraphState to the uploaded to our files-service. There's no other public API on the frontend to handle this at the moment
+    window.threekit.api.saveConfiguration().res
+      .then(({variant, sceneGraphState}) => fetch('https://preview.threekit.com/api/asset-jobs/2e3d3e2f-863e-4259-ac28-3696eb0647f0/export/stp?bearer_token=f33f2b85-1960-449e-aa3e-13155547483a', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          sync: true,
+          settings: { "arExport": true },
+          assetId: "2e3d3e2f-863e-4259-ac28-3696eb0647f0",
+          orgId: "0f33898b-1ed8-4ae9-ae3f-2699f6380d0e",
+          configuration: variant,
+          sceneGraphState
+        })
+      }))
+      .then(res => res.json())
+      .then(res => {
+        const fileId = res.job.runs[0].results.files[0].id;
+        console.log(`qqq fileId [null] = `, fileId);
+        
+        
+        const href = `https://preview.threekit.com/api/files/${fileId}/content`;
+        const a = document.createElement("a");
+        document.body.appendChild(a);
+        a.style = "display: none";
+        a.href = href;
+        a.click();
+      }) 
+  };
+
 
   pdfButton.onclick = async () => {
     const { showDimensions, buildPdf } = window.threekit;
