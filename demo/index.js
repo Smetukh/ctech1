@@ -389,7 +389,7 @@ const initTestPage = () => {
   exportStepButton.onclick = () => {
     // saveConfiguration() causes sceneGraphState to the uploaded to our files-service. There's no other public API on the frontend to handle this at the moment
     window.threekit.api.saveConfiguration().res
-      .then(({variant, sceneGraphState}) => fetch('https://preview.threekit.com/api/asset-jobs/2e3d3e2f-863e-4259-ac28-3696eb0647f0/export/stp?bearer_token=f33f2b85-1960-449e-aa3e-13155547483a', {
+      .then(({variant, sceneGraphState}) => fetch('https://preview.threekit.com/api/asset-jobs/2e3d3e2f-863e-4259-ac28-3696eb0647f0/export/stp?bearer_token=02c37e1c-8365-415e-a676-c2b79eb9a00b', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
