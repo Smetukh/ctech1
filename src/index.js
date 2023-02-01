@@ -8,6 +8,8 @@ import {
   MEASUREMENT_CONFIG,
   MEASUREMENT_NAME,
   pdfHeaderBase64,
+  INCH_TO_CM,
+  CM_TO_M,
 } from './constants';
 import { createPools } from './objectPool';
 import State from './step1/state';
@@ -21,6 +23,7 @@ import { setNodeHighlighting } from './step1/highlight';
 import { Cabinet } from './Component/Cabinet';
 import { Cart } from './Component/Cart';
 import { getRootNode } from './helper';
+import { FLOOR_CONSTANTS, WALL_CONSTANTS } from './step1/constants';
 
 const rollbar = new Rollbar({
   accessToken: '1aff9a1a86b6413091030dfd0efc5a75',
@@ -29,8 +32,8 @@ const rollbar = new Rollbar({
 });
 
 // could use env var for these
-const threekitEnv = 'preview'; // 'admin-fts'; // process.env.THREEKIT_ENV;
-const authToken = '02c37e1c-8365-415e-a676-c2b79eb9a00b'; // process.env.THREEKIT_AUTH_TOKEN;
+const threekitEnv = 'preview'; // process.env.THREEKIT_ENV;
+const authToken = '450f9c4f-cdb2-4190-9b12-ba87138ced3d'; // process.env.THREEKIT_AUTH_TOKEN;
 
 console.log(
   `Initializing ${threekitEnv} configurator with auth token`,
@@ -418,7 +421,7 @@ window.threekit = {
       )
     })
   },
-  showDimensions: (withDimensions) => { // set dimensions visible: true/false      
+  showDimensions: (withDimensions) => { // set dimensions visible: true/false
     const { scene } = window.threekit.api;
     const measurementNodes = scene.filterNodes({ name: MEASUREMENT_NAME });
     measurementNodes.forEach((id) => {
@@ -431,223 +434,115 @@ window.threekit = {
       );
     });
   },
+  showWalls: (isVisible) => {
+    const { scene } = window.threekit.api;
+    // set visible walls
+    const hideWallList = [
+      ...Object.values(WALL_CONSTANTS.LOCATIONS).reduce((acc, { NODE_WALL_CHILD, CAMERA_NULL }) => [...acc, NODE_WALL_CHILD, CAMERA_NULL], []).flat(), // ['WALL_RIGHT_CHILD', 'RIGHT_Cam_Null', 'FLOOR']
+      FLOOR_CONSTANTS.MESH_NAME
+    ];        
+    hideWallList.forEach(name => {
+      const itemData = scene.getAll({ hierarchical: true, name });
+      const itemObj = Object.values(itemData)[0];
+      scene.set(
+        { id: itemObj.id, plug: 'Properties', property: 'visible' },
+        isVisible
+      );
+    });
+    // set visible top signs
+    const signData = scene.getAll({ hierarchical: true, name: 'Sign' });
+    Object.values(signData).forEach(({ id }) => {          
+      scene.set(
+        { id, plug: 'Properties', property: 'visible' },
+        isVisible
+      );
+    });
+  },
   buildPdf: async (json) => {
     const { scene, snapshotAsync, player } = window.threekit.api;
     const doc = new JSPdf({ orientation: 'l' });
-    // add pdf header
-    
-
-    if (Object.keys(json).length) { // base layout
-      doc.addImage(pdfHeaderBase64, 'png', 10, 0, 270, 45);
-      // adjust snapshot big height
-      let heightMultiplier = 1;
-      if (json.height > 50) heightMultiplier = json.height / 50;
-      
-
-      // add product front snapshot
-      const cameraDataFront = await scene.getAll({
-        hierarchical: true,
-        name: 'Camera Front',
-      });
-      const cameraFront = Object.values(cameraDataFront).find((camera) => camera.type === "Camera");
-
-      const cameraFrontTranslation = window.api.scene.get({
-        id: cameraFront.id,
-        plug: 'Transform',
-        property: 'translation',
-      });  
-      window.api.scene.set(
-        {
-          id: cameraFront.id,
-          plug: 'Transform',
-          property: 'translation',
-        },
-        {
-          ...cameraFrontTranslation,
-          z: cameraFrontTranslation.z * heightMultiplier
-        }
-      );
-
-      await player.evaluateSceneGraph();
-        // disable Z measurement line
-      scene.set({ type: 'Measurement', hierarchical: true, plug: 'Measurement', property:'zEnabled' }, false);
-      const snapshotB64Front = await snapshotAsync({
-        size: { width: 600, height: 600 },
-        mimeType: "image/png",
-        cameraId: cameraFront.id,
-      });    
-      doc.addImage(snapshotB64Front, 'PNG', 10, 80)
-
-      // add product right side snapshot
-      const cameraDataSide = await scene.getAll({
-        hierarchical: true,
-        name: 'Camera Right',
-      });
-      
-      const cameraRightSide = Object.values(cameraDataSide).find((camera) => camera.type === "Camera");
-
-      // compute the X,Z camera distance to have the same product height on snapshot
-      const zCameraTransform = 5 - json.depth * 2.54 / 2 * 0.01; // get camera Z distance from cabinet to camera    
-      const newXCameraTransform = zCameraTransform + (json.width - json.depth) * 2.54 / 2 * 0.01; // set camera X distance from cabinet to camera
-      
-      const cameraRightSideId = cameraRightSide.id;
-      const cameraRightPosition = window.api.scene.get({
-        id: cameraRightSideId,
-        plug: 'Transform',
-        property: 'translation',
-      });    
-      
-      scene.set({ type:'Measurement', hierarchical: true, plug: 'Measurement', property: 'zEnabled' }, true);
-      scene.set({ type:'Measurement', hierarchical: true, plug: 'Measurement', property: 'xEnabled' }, false);
-      window.api.scene.set(
-        {
-          id: cameraRightSideId,
-          plug: 'Transform',
-          property: 'translation',
-        },
-        {
-          ...cameraRightPosition,
-          x: newXCameraTransform * heightMultiplier,
-        }
-      );
-
-      await player.evaluateSceneGraph();
-
-      const snapshotB64Side = await snapshotAsync({
-        size: { width: 600, height: 600 },
-        mimeType: "image/png",
-        cameraId: cameraRightSide.id,
-      });
-      // enable X measurement line
-      scene.set({ type:'Measurement', hierarchical: true, plug: 'Measurement', property: 'xEnabled' }, true);
-      doc.addImage(snapshotB64Side, 'PNG', 160, 80)
-
-      
-    } else {
-      const showWalls = (isVisible) => {
-        // hide walls
-        const hideWallList = [
-          'WALL_FRONT_CHILD', 'FRONT_Cam_Null',
-          'WALL_BACK_CHILD', 'BACK_Cam_Null',
-          'WALL_LEFT_CHILD', 'LEFT_Cam_Null',
-          'WALL_RIGHT_CHILD', 'RIGHT_Cam_Null',
-          'FLOOR'
-        ]
-        hideWallList.forEach(itemName => {
-          const itemData = scene.getAll({
-            hierarchical: true,
-            name: itemName,
-          });
-          const itemObj = Object.values(itemData)[0];
-          scene.set(
-            { id: itemObj.id, plug: 'Properties', property: 'visible' },
-            isVisible
+    try {
+      const updateCameraTranslation = async ({ name, newX, newY, newZ }) => {          
+        const cameraData = scene.getAll({ hierarchical: true, name });      
+        const { id } = Object.values(cameraData).find(({ type }) => type === "Camera"); 
+        if (newX || newY || newZ) { // upate camera translation
+          const { x, y, z } = window.api.scene.get({ id, plug: 'Transform', property: 'translation' });
+          window.api.scene.set(
+            { id, plug: 'Transform',  property: 'translation' },
+            {
+              x: newX || x,
+              y: newY || y,
+              z: newZ || z,
+            }
           );
-        });
-        // hide top signs
-        const signData = scene.getAll({
-          hierarchical: true,
-          name: 'Sign',
-        });
-
-        Object.values(signData).forEach(sign => {          
-          scene.set(
-            { id: sign.id, plug: 'Properties', property: 'visible' },
-            isVisible
-          );
-        });
+          await player.evaluateSceneGraph();
+        }
+        return id;
       }
- 
-      showWalls(false);
-      // add product 45 snapshot
-      doc.addImage(pdfHeaderBase64, 'png', 10, 0, 270, 45);
-      const cameraData45 = await scene.getAll({
-        hierarchical: true,
-        name: 'Camera_Snapshot_45',
-      });
-      const camera45 = Object.values(cameraData45).find((camera) => camera.type === "Camera");
 
-      await player.evaluateSceneGraph();
-      const snapshotB64 = await snapshotAsync({
-        size: { width: 900, height: 600 },
-        mimeType: "image/png",
-        cameraId: camera45.id,
-      });
-      doc.addImage(snapshotB64, 'PNG', 30, 40);
-      doc.addPage();
+      const buildBaseScenePDF = async () => {
+        // adjust snapshot for high cabinets
+        let dimensionMultiplier = 1;
+        if (json.height > 50) dimensionMultiplier = json.height / 50;
 
-      // add product front snapshot
-      doc.addImage(pdfHeaderBase64, 'png', 10, 0, 270, 45);
-      const cameraDataFront = await scene.getAll({
-        hierarchical: true,
-        name: 'Camera_Front_Snapshot',
-      });
-      const cameraFront = Object.values(cameraDataFront).find((camera) => camera.type === "Camera");
-
-      const cameraFrontTranslation = window.api.scene.get({
-        id: cameraFront.id,
-        plug: 'Transform',
-        property: 'translation',
-      });  
-      window.api.scene.set(
-        {
-          id: cameraFront.id,
-          plug: 'Transform',
-          property: 'translation',
-        },
-        {
-          ...cameraFrontTranslation,
-          z: 4,
-          y: 1
+        // compute the X,Z camera distance to have the same product height on snapshot
+        const zCameraTransform = 5 - json.depth * INCH_TO_CM / 2 * CM_TO_M; // get camera Z distance from cabinet to camera    
+        const newX = zCameraTransform + (json.width - json.depth) * INCH_TO_CM / 2 * CM_TO_M; // set camera X distance from cabinet to camera
+        const snapshotCameras = [
+          { name: 'Camera Front', newZ: 5 * dimensionMultiplier, property: 'zEnabled' },
+          { name: 'Camera Right', newX: newX * dimensionMultiplier, property: 'xEnabled' }
+        ];
+        // add logo bas64 image
+        doc.addImage(pdfHeaderBase64, 'png', 10, 0, 270, 45);
+        // add 2 images for 1 pdf page
+        for (const [i, camera] of snapshotCameras.entries()) {
+          const { property, ...cameraData } = camera;
+          // hide measurement line
+          if (property) scene.set({ type: 'Measurement', hierarchical: true, plug: 'Measurement', property }, false);
+          const cameraId = await updateCameraTranslation(cameraData);
+          const snapshotB64 = await snapshotAsync({
+            size: { width: 600, height: 600 },
+            mimeType: "image/png",
+            cameraId,
+          });
+          doc.addImage(snapshotB64, 'PNG', 10 + 150 * i, 80);
+          // show measurement line
+          if (property) scene.set({ type: 'Measurement', hierarchical: true, plug: 'Measurement', property }, true);
         }
-      );
-      await player.evaluateSceneGraph();
-      const snapshotB64Front = await snapshotAsync({
-        size: { width: 900, height: 600 },
-        mimeType: "image/png",
-        cameraId: cameraFront.id,
-      });          
-      
-      doc.addImage(snapshotB64Front, 'PNG', 30, 60);
-      doc.addPage();
-      
+        doc.save('ctech_configuration.pdf');
+      };
 
-      // add product front snapshot
-      doc.addImage(pdfHeaderBase64, 'png', 10, 0, 270, 45);
-      const cameraDataLeft = await scene.getAll({
-        hierarchical: true,
-        name: 'Camera_Left',
-      });
-      const cameraLeft = Object.values(cameraDataLeft).find((camera) => camera.type === "Camera");
-      const cameraLeftTranslation = window.api.scene.get({
-        id: cameraLeft.id,
-        plug: 'Transform',
-        property: 'translation',
-      });      
-      
-      window.api.scene.set(
-        {
-          id: cameraLeft.id,
-          plug: 'Transform',
-          property: 'translation',
-        },
-        {
-          ...cameraLeftTranslation,
-          z: -2,
-          x: 8,
-          y: 1
+      const buildRoomPdf = async () => {
+        const snapshotCameras = [
+          { name: 'Camera_Snapshot_45' },
+          { name: 'Camera_Front_Snapshot' },
+          { name: 'Camera_Left', newX: 8, newY: 1, newZ: -2 },
+        ];
+        window.threekit.showWalls(false); // hide walls
+
+        // build pdf pages
+        for (const [i, camera] of snapshotCameras.entries()) {
+          if (i) doc.addPage();
+          doc.addImage(pdfHeaderBase64, 'png', 10, 0, 270, 45);
+          const cameraId = await updateCameraTranslation(camera);
+          
+          const snapshotB64 = await snapshotAsync({
+            size: { width: 900, height: 600 },
+            mimeType: "image/png",
+            cameraId,
+          });
+          doc.addImage(snapshotB64, 'PNG', 30, 40);
         }
-      );
-      await player.evaluateSceneGraph();
-      const snapshotB64Left = await snapshotAsync({
-        size: { width: 900, height: 600 },
-        mimeType: "image/png",
-        cameraId: cameraLeft.id,
-      });
-      doc.addImage(snapshotB64Left, 'PNG', 30, 60)
-      showWalls(true);
+        window.threekit.showWalls(true);
+        doc.save('ctech_configuration.pdf');
+      };
+
+      const blocks = window.state.getBlocks();
+      if (blocks.length) await buildRoomPdf(); // case for room layout
+      else await buildBaseScenePDF(); // base scene
+    } catch(err) {
+      console.log(`pdf build err = `, err);
     }
-    doc.save('ctech_configuration.pdf');
   }
 };
 
