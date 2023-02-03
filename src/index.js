@@ -33,7 +33,7 @@ const rollbar = new Rollbar({
 
 // could use env var for these
 const threekitEnv = 'preview'; // process.env.THREEKIT_ENV;
-const authToken = '450f9c4f-cdb2-4190-9b12-ba87138ced3d'; // process.env.THREEKIT_AUTH_TOKEN;
+const authToken = '02c37e1c-8365-415e-a676-c2b79eb9a00b'; // process.env.THREEKIT_AUTH_TOKEN;
 
 console.log(
   `Initializing ${threekitEnv} configurator with auth token`,
