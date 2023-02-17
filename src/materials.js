@@ -43,6 +43,7 @@ const parts = {};
 const materials = {};
 
 function materialAssigner(id) {
+  return;
   return async (instanceId, name) => {
     const isFinish = !name;
     // Finish color can be changed, keep track of instances
