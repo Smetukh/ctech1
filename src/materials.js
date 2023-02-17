@@ -77,19 +77,20 @@ async function setItemFinish(cabId, name) {
       });
       return acc;
     }, []);
-    // const matId = await findMaterial(name);
-    // instances.forEach((instanceId) => {
-    //   window.api.scene.set(
-    //     { id: instanceId, plug: 'Material', property: 'reference' },
-    //     matId,
-    //   );
-    // });
+    const matId = await findMaterial(name);
+    instances.forEach((instanceId) => {
+      window.api.scene.set(
+        { id: instanceId, plug: 'Material', property: 'reference' },
+        matId,
+      );
+    });
     // console.error('Material not initialized');
     FINISH[cabId] = name;
   }
 }
 
 async function findMaterial(name) {
+  return;
   if (materials[name]) return materials[name];
   let meshId;
   // Block materials are `opacity_color`, and others
@@ -136,8 +137,8 @@ async function findMaterial(name) {
       name,
     });
   }
-
-  const matInstanceId = await window.api.player.getAssetInstance({
+  // The line below should be `const matInstanceId = await window.api.player.getAssetInstance({` however with the await in there, materials don't apply correctly in the layout builder.
+  const matInstanceId = window.api.player.getAssetInstance({
     // from: getRootNode(window.api),
     id: meshId,
     plug: 'Material',
