@@ -43,7 +43,6 @@ const parts = {};
 const materials = {};
 
 function materialAssigner(id) {
-  return;
   return async (instanceId, name) => {
     const isFinish = !name;
     // Finish color can be changed, keep track of instances
@@ -60,11 +59,11 @@ function materialAssigner(id) {
     if (!MATERIAL_MAPPING[name]) {
       console.error('Invalid material name');
     } else {
-      const matId = await findMaterial(name)
-      window.api.scene.set(
-        { id: instanceId, plug: 'Material', property: 'reference' },
-        matId
-      );
+      // const matId = await findMaterial(name)
+      // window.api.scene.set(
+      //   { id: instanceId, plug: 'Material', property: 'reference' },
+      //   matId
+      // );
     }
   };
 }
@@ -78,13 +77,13 @@ async function setItemFinish(cabId, name) {
       });
       return acc;
     }, []);
-    const matId = await findMaterial(name);
-    instances.forEach((instanceId) => {
-      window.api.scene.set(
-        { id: instanceId, plug: 'Material', property: 'reference' },
-        matId,
-      );
-    });
+    // const matId = await findMaterial(name);
+    // instances.forEach((instanceId) => {
+    //   window.api.scene.set(
+    //     { id: instanceId, plug: 'Material', property: 'reference' },
+    //     matId,
+    //   );
+    // });
     // console.error('Material not initialized');
     FINISH[cabId] = name;
   }
